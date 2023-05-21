@@ -1,15 +1,10 @@
-use crate::tile_bag::TileBag;
-use crate::tile_bag::Tile;
-use crate::tile_bag::AddTile;
-use crate::tile_bag::DrawTile;
-use crate::tile_bag::PrintTiles;
-use crate::board::Board;
-use crate::board::print_board;
-use crate::board::create_classic_board;
-
+use crate::tile_bag::{TileBag, Tile, AddTile, DrawTile, PrintTiles};
+use crate::board::{Board, PlaceTiles, BoardCoordinates, BoardDirection, print_board, create_classic_board};
 use rand::rngs::ThreadRng;
+
 pub mod tile_bag;
 pub mod board;
+
 fn main() {
     //create and initilize the tile bag
     let mut tile_bag = TileBag { tiles: Vec::new() };
@@ -25,5 +20,13 @@ fn main() {
 
     // create the board
     let mut board: Board = create_classic_board();
+    print_board(&board);
+
+    // place our tile
+    let mut tile_vec: Vec<Tile> = Vec::new();
+    tile_vec.push(Tile {character: 'c', value: 100});
+    tile_vec.push(Tile {character: 'd', value: 100});
+    tile_vec.push(Tile {character: 'e', value: 100});
+    &mut board.place_tiles(&tile_vec, BoardCoordinates {x: 7, y: 7}, BoardDirection::North);
     print_board(&board);
 }

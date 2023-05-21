@@ -20,20 +20,75 @@ pub struct Space {
 
 // should be 14 for classic
 const BOARD_SIZE: usize = 14;
+#[derive(Copy, Clone)]
 pub struct Board {
     spaces: [[Space; BOARD_SIZE]; BOARD_SIZE]
 }
 
+// are we allowed to put restrictions on this? i.e. less than 14
+#[derive(Copy, Clone)]
+pub struct BoardCoordinates {
+    pub x: usize,
+    pub y: usize
+}
+
+#[derive(Copy, Clone)]
+pub enum BoardDirection {
+    North,
+    South,
+    East,
+    West
+}
+
+// is there a way to do generic traits that return T instead of BoardCoordinates?
+// feels a little silly to define this as a trait when it returns this
+pub trait Increment {
+    fn increment(&self, direction: BoardDirection) -> BoardCoordinates;
+}
+
+impl Increment for BoardCoordinates {
+    fn increment(&self, direction: BoardDirection) -> BoardCoordinates {
+        return match direction {
+            BoardDirection::North => BoardCoordinates {x: self.x - 1, y: self.y},
+            BoardDirection::South => BoardCoordinates {x: self.x + 1, y: self.y},
+            BoardDirection::East => BoardCoordinates {x: self.x, y: self.y - 1},
+            BoardDirection::West => BoardCoordinates {x: self.x, y: self.y + 1}
+        };
+    }
+}
 pub struct Score {
     value: u32
 }
 
 pub trait PlaceTiles {
-    fn place_tiles(&self, tiles: Vec<Tile>) -> Option<Score>;
+    fn place_tiles(&mut self, tiles: &Vec<Tile>, start: BoardCoordinates, direction: BoardDirection) -> Option<Score>;
 }
 
 impl PlaceTiles for Board {
-    fn place_tiles(&self, tiles: Vec<Tile>) -> Option<Score> {
+    fn place_tiles(&mut self, tiles: &Vec<Tile>, start: BoardCoordinates, direction: BoardDirection) -> Option<Score> {
+        // first move MUST place tiles in H8
+
+        let mut current_coords: BoardCoordinates = start;
+        let mut current_space: Space = self.spaces[start.x][start.y];
+        for tile in tiles {
+            let mut tile_placed: bool = false;
+            while !tile_placed {
+                if !current_space.occupied {
+                    current_space.current_tile = Some(*tile);
+                    current_space.occupied = true;
+                    tile_placed = true;
+                    self.spaces[current_coords.x][current_coords.y] = current_space;
+                    println!("Placed tile {} at space {} {}", tile.character, current_coords.x, current_coords.y);
+                }
+                // move to next space
+                current_coords = current_coords.increment(direction);
+                current_space = self.spaces[current_coords.x][current_coords.y];
+            }
+        }
+        print_board(self);
+        // tiles must be adjacent to at least one other tile 
+
+        // 
         return Some(Score {value: 0});
     }
 }
