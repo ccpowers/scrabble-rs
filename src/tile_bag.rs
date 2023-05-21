@@ -2,8 +2,9 @@ use rand::rngs::ThreadRng;
 use rand::Rng;
 //use std::option;
 
+#[derive(Copy, Clone)]
 pub struct Tile {
-    pub char: char,
+    pub character: char,
     pub value: u32
 }
 
@@ -17,7 +18,7 @@ pub struct InfiniteTileBag {
 }
 
 pub trait DrawTile {
-    fn drawTile(&mut self, rng: ThreadRng) -> Option<Tile>;
+    fn draw_tile(&mut self, rng: ThreadRng) -> Option<Tile>;
 }
 
 pub trait AddTile {
@@ -34,7 +35,7 @@ impl AddTile for TileBag {
     }
 }
 impl DrawTile for TileBag {
-    fn drawTile(&mut self, mut rng: ThreadRng) -> Option<Tile> {
+    fn draw_tile(&mut self, mut rng: ThreadRng) -> Option<Tile> {
         // if there are no tiles, return nothing
         if self.tiles.len() == 0 {
             return None;
@@ -52,7 +53,7 @@ impl PrintTiles for TileBag {
     fn print_tiles(&self) -> () {
         let mut str: String = String::from("TileBag: ");
         for tile in &self.tiles {
-            str.push_str(&format!("({} {})", tile.char, tile.value));
+            str.push_str(&format!("({} {})", tile.character, tile.value));
         }
         println!("{}", str);
     }
