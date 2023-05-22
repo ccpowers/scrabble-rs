@@ -5,8 +5,9 @@ use cursive::view::{Resizable};
 use crate::board_view::BoardView;
 use crate::board::{Board};
 use crate::tile_bag::{Tile};
+use crate::rack_view::RackView;
 
-pub fn generate_scrabble_gui(board: Board, _user_tiles: [Option<Tile>; 7]) -> CursiveRunnable {
+pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> CursiveRunnable {
      // show some stuff with cursive
      let mut siv = cursive::default();
 
@@ -16,7 +17,7 @@ pub fn generate_scrabble_gui(board: Board, _user_tiles: [Option<Tile>; 7]) -> Cu
      // create the tile rack view
      let rack_panel = Panel::new(
         LinearLayout::horizontal()
-            .child(TextView::new("Rack goes here"))
+            .child(RackView {tiles: user_tiles})
             .child(DummyView.fixed_width(1))
             .child(Button::new("Exchange", |s| s.quit()))
             .child(DummyView.fixed_width(1))

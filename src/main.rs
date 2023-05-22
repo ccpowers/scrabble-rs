@@ -8,6 +8,7 @@ pub mod tile_bag;
 pub mod board;
 pub mod gui;
 pub mod board_view;
+pub mod rack_view;
 fn main() {
     //create and initilize the tile bag
     let mut tile_bag = classic_tile_bag();
@@ -15,7 +16,7 @@ fn main() {
 
     // draw tiles for user
     let mut user_tiles: [Option<Tile>; 7] = [None; 7];
-    for i in 0..6 {
+    for i in 0..7 {
         user_tiles[i] = tile_bag.draw_tile(&mut tile_rng);
     }
 

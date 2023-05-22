@@ -43,7 +43,9 @@ impl DrawTile for TileBag {
         let ind = rng.gen_range(0..self.tiles.len());
 
         // remove them from the bag
-        return Some(self.tiles.remove(ind));
+        let tile = self.tiles.remove(ind);
+        println!("Drew tile {}", tile.character);
+        return Some(tile);
     }
 }
 
