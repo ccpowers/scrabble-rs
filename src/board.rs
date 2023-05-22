@@ -19,10 +19,10 @@ pub struct Space {
 }
 
 // should be 14 for classic
-const BOARD_SIZE: usize = 14;
+pub const BOARD_SIZE: usize = 14;
 #[derive(Copy, Clone)]
 pub struct Board {
-    spaces: [[Space; BOARD_SIZE]; BOARD_SIZE]
+    pub spaces: [[Space; BOARD_SIZE]; BOARD_SIZE]
 }
 
 // are we allowed to put restrictions on this? i.e. less than 14
