@@ -1,7 +1,5 @@
 use rand::rngs::ThreadRng;
 use rand::Rng;
-//use std::option;
-
 #[derive(Copy, Clone)]
 pub struct Tile {
     pub character: char,
@@ -18,7 +16,7 @@ pub struct InfiniteTileBag {
 }
 
 pub trait DrawTile {
-    fn draw_tile(&mut self, rng: ThreadRng) -> Option<Tile>;
+    fn draw_tile(&mut self, rng: &mut ThreadRng) -> Option<Tile>;
 }
 
 pub trait AddTile {
@@ -35,7 +33,7 @@ impl AddTile for TileBag {
     }
 }
 impl DrawTile for TileBag {
-    fn draw_tile(&mut self, mut rng: ThreadRng) -> Option<Tile> {
+    fn draw_tile(&mut self, rng: &mut ThreadRng) -> Option<Tile> {
         // if there are no tiles, return nothing
         if self.tiles.len() == 0 {
             return None;

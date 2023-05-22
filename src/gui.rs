@@ -4,8 +4,9 @@ use cursive::align::HAlign;
 use cursive::view::{Resizable};
 use crate::board_view::BoardView;
 use crate::board::{Board};
+use crate::tile_bag::{Tile};
 
-pub fn generate_scrabble_gui(board: Board) -> CursiveRunnable {
+pub fn generate_scrabble_gui(board: Board, _user_tiles: [Option<Tile>; 7]) -> CursiveRunnable {
      // show some stuff with cursive
      let mut siv = cursive::default();
 

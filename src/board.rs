@@ -1,6 +1,4 @@
 use crate::tile_bag::Tile;
-use colored::Colorize;
-use colored::ColoredString;
 
 #[derive(Copy, Clone)]
 pub enum SpaceValue {

@@ -1,7 +1,7 @@
 use cursive::Printer;
-use cursive::view::View;
+
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use crate::board::{Board, BoardCoordinates, SpaceValue, BOARD_SIZE};
+use crate::board::{Board, SpaceValue, BOARD_SIZE};
 
 pub struct BoardView {
     pub board: Board,
