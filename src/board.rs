@@ -15,7 +15,7 @@ pub enum SpaceValue {
 pub struct Space {
     value: SpaceValue,
     occupied: bool,
-    current_tile: Option<Tile>
+    pub current_tile: Option<Tile>
 }
 
 // should be 14 for classic

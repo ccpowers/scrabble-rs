@@ -10,16 +10,21 @@ pub fn generate_scrabble_gui(board: Board) -> CursiveRunnable {
      let mut siv = cursive::default();
 
      // create the board view
-     let board_panel = Panel::new(BoardView {board}).fixed_height(16);
+     let board_panel = Panel::new(BoardView {board}).fixed_height(17);
      
      // create the tile rack view
      let rack_panel = Panel::new(TextView::new("Rack goes here"));
+    
+    // create the score view
+    let score_panel = Panel::new(TextView::new("Score goes here"));
+    
      // create the layout
      siv.add_layer(
          Dialog::around(
              LinearLayout::vertical()
                  .child(TextView::new("Scrabble").h_align(HAlign::Center))
                  .child(DummyView.fixed_height(1))
+                 .child(score_panel)
                  .child(board_panel)
                  .child(rack_panel)
          )
