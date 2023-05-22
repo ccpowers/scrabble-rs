@@ -1,5 +1,5 @@
 use cursive::views::{TextView, Button, Dialog, LinearLayout, DummyView, Panel};
-use cursive::CursiveRunnable;
+use cursive::{Cursive, CursiveRunnable};
 use cursive::align::HAlign;
 use cursive::view::{Resizable};
 use crate::board_view::BoardView;
@@ -19,9 +19,9 @@ pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> Cur
         LinearLayout::horizontal()
             .child(RackView {tiles: user_tiles})
             .child(DummyView.fixed_width(1))
-            .child(Button::new("Exchange", |s| s.quit()))
+            .child(Button::new("Exchange", |s| generate_exchange_pop(s)))
             .child(DummyView.fixed_width(1))
-            .child(Button::new("Play", |s| s.quit()))
+            .child(Button::new("Play", |s| generate_play_pop(s)))
     );
     
     // create the score view
@@ -40,5 +40,29 @@ pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> Cur
          .button("Quit", |s| s.quit())
          .h_align(HAlign::Center),
      );
+
+
      return siv;
+}
+
+fn generate_play_pop(siv: &mut Cursive) {
+    siv.add_layer(
+        Dialog::around(
+            LinearLayout::vertical()
+            .child(TextView::new("Get ready to play a move"))
+            .child(Button::new("Play", |s| { s.pop_layer(); }))
+        )
+        .button("Play", |s| {s.pop_layer();})
+    );
+}
+
+fn generate_exchange_pop(siv: &mut Cursive) {
+    siv.add_layer(
+        Dialog::around(
+            LinearLayout::vertical()
+            .child(TextView::new("Get ready to play a move"))
+            .child(Button::new("Play", |s| { s.pop_layer(); }))
+        )
+        .button("Play", |s| {s.pop_layer();})
+    );
 }
