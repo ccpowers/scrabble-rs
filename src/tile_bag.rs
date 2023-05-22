@@ -58,3 +58,46 @@ impl PrintTiles for TileBag {
         println!("{}", str);
     }
 }
+
+pub fn classic_tile_bag() -> TileBag {
+    //create and initilize the tile bag
+    let mut tile_bag = TileBag { tiles: Vec::new() };
+
+    // tuple of (character, points, number in bag)
+    let classic_tiles: [(char, u32, usize); 26] = [
+        ('a', 1, 9),
+        ('b', 3, 2),
+        ('c', 3, 2),
+        ('d', 2, 4),
+        ('e', 1, 12),
+        ('f', 4, 2),
+        ('g', 2, 3),
+        ('h', 4, 2),
+        ('i', 1, 9),
+        ('j', 8, 1),
+        ('k', 5, 1),
+        ('l', 1, 4),
+        ('m', 3, 2),
+        ('n', 1, 6),
+        ('o', 1, 8),
+        ('p', 3, 2),
+        ('q', 10, 1),
+        ('r', 1, 6),
+        ('s', 1, 4),
+        ('t', 1, 6),
+        ('u', 1, 4),
+        ('v', 4, 2),
+        ('w', 4, 2),
+        ('x', 8, 1),
+        ('y', 4, 2),
+        ('z', 10, 1)
+    ];
+
+    for tile_tuple in classic_tiles {
+        for _i in 1..tile_tuple.2 {
+            tile_bag.add_tile(Tile {character: tile_tuple.0, value: tile_tuple.1});
+        }
+    }
+
+    return tile_bag;  
+}

@@ -1,6 +1,7 @@
 use crate::tile_bag::{TileBag, Tile, AddTile, DrawTile, PrintTiles};
 use crate::board::{Board, PlaceTiles, BoardCoordinates, BoardDirection, print_board, create_classic_board};
 use rand::rngs::ThreadRng;
+use tile_bag::classic_tile_bag;
 use crate::gui::{generate_scrabble_gui};
 
 pub mod tile_bag;
@@ -9,16 +10,8 @@ pub mod gui;
 pub mod board_view;
 fn main() {
     //create and initilize the tile bag
-    let mut tile_bag = TileBag { tiles: Vec::new() };
-
-    tile_bag.add_tile(Tile {character: 'a', value: 2});
-    tile_bag.add_tile(Tile {character: 'b', value: 2});
-    tile_bag.add_tile(Tile {character: 'c', value: 2});
-    tile_bag.print_tiles();
+    let mut tile_bag = classic_tile_bag();
     let tile_rng: ThreadRng = rand::thread_rng();
-    let tile: Option<Tile> = tile_bag.draw_tile(tile_rng);
-    println!("Drew tile");
-    tile_bag.print_tiles();
 
     // create the board
     let mut board: Board = create_classic_board();

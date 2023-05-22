@@ -13,13 +13,13 @@ pub enum SpaceValue {
 
 #[derive(Copy, Clone)]
 pub struct Space {
-    value: SpaceValue,
+    pub value: SpaceValue,
     occupied: bool,
     pub current_tile: Option<Tile>
 }
 
 // should be 14 for classic
-pub const BOARD_SIZE: usize = 14;
+pub const BOARD_SIZE: usize = 15;
 #[derive(Copy, Clone)]
 pub struct Board {
     pub spaces: [[Space; BOARD_SIZE]; BOARD_SIZE]
@@ -98,7 +98,20 @@ pub fn create_classic_board() -> Board {
     let mut board: Board = {Board {spaces: [[Space {value: SpaceValue::SingleLetter, occupied: false, current_tile: None}; BOARD_SIZE]; BOARD_SIZE]}};
     
     // update board with different values
-    board.spaces[1][1].value = SpaceValue::TripleWord;
+    let triple_word_coordinates: [BoardCoordinates; 8] = [ 
+        BoardCoordinates {x:0, y:0}, 
+        BoardCoordinates {x:0, y:7},
+        BoardCoordinates {x:0, y:14},
+        BoardCoordinates {x:7, y:0},
+        BoardCoordinates {x:7, y:14},
+        BoardCoordinates {x:14, y:0},
+        BoardCoordinates {x:14, y:7},
+        BoardCoordinates {x:14, y:14}
+        ];
+
+    for coordinate in triple_word_coordinates {
+        board.spaces[coordinate.x][coordinate.y].value = SpaceValue::TripleWord;
+    }
     
     return board;
 }
@@ -107,24 +120,15 @@ pub fn print_board(board: &Board) -> () {
 
     for row in &board.spaces {
         for space in row {
-            let mut space_string: String = String::from("");
             let space_string: String = match &space.current_tile {
                 Some(c) => format!("[{}]", c.character),
                 None => "[ ]".to_string()
             };
 
-            /**let space_string_colored: ColoredString = match &space.value {
-                SpaceValue::SingleLetter => space_string.normal(),
-                SpaceValue::TripleWord => space_string.red(),
-                &SpaceValue::DoubleLetter | &SpaceValue::TripleLetter | &SpaceValue::DoubleWord => space_string.blue()
-            };**/
-            //println!("Adding space string");
             board_string.push_str(&space_string);
-            //println!("{}", &space_string_colored);
         }
-        //println!("Adding return");
         board_string.push('\n');
     }
 
-    println!("{}", board_string.blue());
+    println!("{}", board_string);
 }
