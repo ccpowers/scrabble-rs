@@ -2,7 +2,7 @@ use cursive::views::{TextView, Button, Dialog, LinearLayout, DummyView, Panel};
 use cursive::{Cursive, CursiveRunnable};
 use cursive::align::HAlign;
 use cursive::view::{Resizable};
-use crate::board_view::BoardView;
+use crate::board_view::{BoardView, generate_board_views};
 use crate::board::{Board};
 use crate::tile_bag::{Tile};
 use crate::rack_view::RackView;
@@ -12,7 +12,8 @@ pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> Cur
      let mut siv = cursive::default();
 
      // create the board view
-     let board_panel = Panel::new(BoardView {board});
+     let board_view = generate_board_views(board);
+     let board_panel = Panel::new(board_view);
      
      // create the tile rack view
      let rack_panel = Panel::new(
@@ -60,7 +61,7 @@ fn generate_exchange_pop(siv: &mut Cursive) {
     siv.add_layer(
         Dialog::around(
             LinearLayout::vertical()
-            .child(TextView::new("Get ready to play a move"))
+            .child(TextView::new("Choose tiles to exchange"))
             .child(Button::new("Play", |s| { s.pop_layer(); }))
         )
         .button("Play", |s| {s.pop_layer();})
