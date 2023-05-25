@@ -2,13 +2,12 @@ use crate::tile_bag::{Tile, DrawTile};
 use crate::board::{Board, PlaceTiles, BoardCoordinates, BoardDirection, create_classic_board};
 use rand::rngs::ThreadRng;
 use tile_bag::classic_tile_bag;
-use crate::gui::{generate_scrabble_gui};
+use crate::gui::gui::{generate_scrabble_gui};
 
 pub mod tile_bag;
 pub mod board;
 pub mod gui;
-pub mod board_view;
-pub mod rack_view;
+
 fn main() {
     //create and initilize the tile bag
     let mut tile_bag = classic_tile_bag();

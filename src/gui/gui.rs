@@ -2,10 +2,10 @@ use cursive::views::{TextView, Button, Dialog, LinearLayout, DummyView, Panel};
 use cursive::{Cursive, CursiveRunnable};
 use cursive::align::HAlign;
 use cursive::view::{Resizable};
-use crate::board_view::{BoardView, generate_board_views};
+use crate::gui::board_view::{BoardView, generate_board_views};
 use crate::board::{Board};
 use crate::tile_bag::{Tile};
-use crate::rack_view::RackView;
+use crate::gui::rack_view::{RackView, generate_rack_views};
 
 pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> CursiveRunnable {
      // show some stuff with cursive
@@ -16,14 +16,16 @@ pub fn generate_scrabble_gui(board: Board, user_tiles: [Option<Tile>; 7]) -> Cur
      let board_panel = Panel::new(board_view);
      
      // create the tile rack view
-     let rack_panel = Panel::new(
+     /**let rack_panel = Panel::new(
         LinearLayout::horizontal()
             .child(RackView {tiles: user_tiles})
             .child(DummyView.fixed_width(1))
             .child(Button::new("Exchange", |s| generate_exchange_pop(s)))
             .child(DummyView.fixed_width(1))
             .child(Button::new("Play", |s| generate_play_pop(s)))
-    );
+    );**/
+
+    let rack_panel = Panel::new(generate_rack_views(user_tiles));
     
     // create the score view
     let score_panel = Panel::new(TextView::new("Score goes here").center());
