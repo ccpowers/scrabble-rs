@@ -8,4 +8,5 @@ edition = "2021"
 [dependencies]
 colored = "2.0.0"
 cursive = "0.20.0"
+quote = "1.0.28"
 rand = "0.8.5"

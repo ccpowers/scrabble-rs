@@ -1,8 +1,11 @@
 use cursive::Printer;
-use cursive::view::View;
+use cursive::direction::Direction;
+use cursive::view::{View, CannotFocus};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout};
 use crate::tile_bag::{Tile};
+use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
+use super::selectable::{Selectable, SetSelected};
 
 pub struct RackView {
     pub tiles: [Option<Tile>; 7]
@@ -30,21 +33,21 @@ impl cursive::view::View for RackView {
 
 pub struct TileView {
     pub tile: Option<Tile>,
-    pub selected: bool
+    pub selected: Selectable
 }
 
-impl cursive::view::View for TileView {
+impl View for TileView {
     fn draw(&self, printer: &Printer) -> () {
         let text = match self.tile {
             Some(c) => format!("[{}]", c.character),
             None => "[ ]".to_string()
         };
 
-        let selected_color: Color = match (self.selected, printer.focused) {
-            (false, false) => Color::Dark(BaseColor::Black),
-            (true, false) => Color::Dark(BaseColor::Green),
-            (false, true) => Color::Dark(BaseColor::Red),
-            (true, true) => Color::Dark(BaseColor::Cyan)
+        let selected_color: Color = match (self.selected.selected, printer.focused) {
+            (false, false) => Color::RgbLowRes(3, 3, 3),
+            (true, false) => Color::RgbLowRes(5, 3, 3),
+            (false, true) => Color::RgbLowRes(3, 5, 3),
+            (true, true) => Color::RgbLowRes(5, 5, 3)
         };
 
         printer.with_color(
@@ -57,13 +60,32 @@ impl cursive::view::View for TileView {
         return cursive::Vec2::new(3, 1);
     }
 
+    fn take_focus(&mut self, _: Direction) -> Result<EventResult, CannotFocus> {
+        return Ok(EventResult::Consumed(None));
+    }
+
+    fn on_event(&mut self, event: Event) -> EventResult {
+        let mut consumed: bool = false;
+
+        match event {
+            Event::Mouse {offset: _, position: _, event: MouseEvent::Press(MouseButton::Left)} => { self.selected.set_selected(true); consumed =true},
+            _ => ()
+        };
+
+        if consumed {
+            return EventResult::Consumed(None);
+        } else {
+            return EventResult::Ignored;
+        }
+    }
+
 }
 
 pub fn generate_rack_views(tiles: [Option<Tile>; 7]) -> LinearLayout {
     let mut rack_layout: LinearLayout = LinearLayout::horizontal();
 
     for tile in tiles {
-        rack_layout.add_child(TileView {tile, selected: false});
+        rack_layout.add_child(TileView {tile, selected: Selectable {selected: false}});
     }
     rack_layout.add_child(Button::new("Exchange", |s| s.quit()));
 
