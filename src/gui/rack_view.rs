@@ -3,7 +3,7 @@ use cursive::direction::Direction;
 use cursive::view::{View, CannotFocus};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout};
-use crate::tile_bag::{Tile};
+use crate::game::tile_bag::{Tile};
 use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
 use super::selectable::{Selectable, SetSelected};
 

@@ -4,8 +4,8 @@ use cursive::views::{LinearLayout, TextView};
 use cursive::direction::Direction;
 use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
 use cursive::view::{View, CannotFocus};
-use crate::board::{Board, SpaceValue, BOARD_SIZE};
-use crate::tile_bag::{Tile};
+use crate::game::board::{Board, SpaceValue, BOARD_SIZE};
+use crate::game::tile_bag::{Tile};
 use crate::gui::space_view::{SpaceView};
 use crate::gui::selectable::Selectable;
 pub struct BoardView {

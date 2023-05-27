@@ -1,4 +1,4 @@
-use crate::tile_bag::Tile;
+use crate::game::tile_bag::Tile;
 
 #[derive(Copy, Clone)]
 pub enum SpaceValue {

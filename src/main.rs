@@ -1,11 +1,10 @@
-use crate::tile_bag::{Tile, DrawTile};
-use crate::board::{Board, PlaceTiles, BoardCoordinates, BoardDirection, create_classic_board};
+use crate::game::tile_bag::{Tile, DrawTile};
+use crate::game::board::{Board, PlaceTiles, BoardCoordinates, BoardDirection, create_classic_board};
 use rand::rngs::ThreadRng;
-use tile_bag::classic_tile_bag;
+use crate::game::tile_bag::classic_tile_bag;
 use crate::gui::gui::{generate_scrabble_gui};
 
-pub mod tile_bag;
-pub mod board;
+pub mod game;
 pub mod gui;
 
 fn main() {

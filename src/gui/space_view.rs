@@ -3,9 +3,9 @@ use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::direction::Direction;
 use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
 use cursive::view::{View, CannotFocus};
-use crate::board::{SpaceValue};
+use crate::game::board::{SpaceValue};
 use crate::gui::selectable::{Selectable, SetSelected};
-use crate::tile_bag::{Tile};
+use crate::game::tile_bag::{Tile};
 
 pub struct SpaceView {
     pub value: SpaceValue,
