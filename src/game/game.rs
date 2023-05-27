@@ -13,7 +13,7 @@ pub struct ScrabbleGame {
 pub fn generate_scrabble_for_one() -> ScrabbleGame {
     //create and initilize the tile bag
     let mut tile_bag = classic_tile_bag();
-    let mut tile_rng: ThreadRng = rand::thread_rng();
+    let _tile_rng: ThreadRng = rand::thread_rng();
 
     // draw tiles for user
     let mut user_tiles: [Option<Tile>; 7] = [None; 7];
@@ -29,7 +29,7 @@ pub fn generate_scrabble_for_one() -> ScrabbleGame {
     tile_vec.push(Tile {character: 'c', value: 100});
     tile_vec.push(Tile {character: 'd', value: 100});
     tile_vec.push(Tile {character: 'e', value: 100});
-    &mut board.place_tiles(&tile_vec, BoardCoordinates {x: 7, y: 7}, BoardDirection::North);
+    let _ = &mut board.place_tiles(&tile_vec, BoardCoordinates {x: 7, y: 7}, BoardDirection::North);
 
     return ScrabbleGame { tile_bag: tile_bag, user_tiles: user_tiles, board: board }
 

@@ -62,7 +62,7 @@ impl PrintTiles for TileBag {
 
 pub fn classic_tile_bag() -> TileBag {
     //create and initilize the tile bag
-    let mut tile_rng: ThreadRng = rand::thread_rng();
+    let tile_rng: ThreadRng = rand::thread_rng();
     let mut tile_bag = TileBag { tiles: Vec::new(), rng: tile_rng };
 
     // tuple of (character, points, number in bag)
