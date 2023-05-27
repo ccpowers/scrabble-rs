@@ -7,7 +7,8 @@ pub struct Tile {
 }
 
 pub struct TileBag {
-    pub tiles: Vec<Tile>
+    pub tiles: Vec<Tile>,
+    pub rng: ThreadRng
 }
 
 pub struct InfiniteTileBag {
@@ -16,7 +17,7 @@ pub struct InfiniteTileBag {
 }
 
 pub trait DrawTile {
-    fn draw_tile(&mut self, rng: &mut ThreadRng) -> Option<Tile>;
+    fn draw_tile(&mut self) -> Option<Tile>;
 }
 
 pub trait AddTile {
@@ -33,14 +34,14 @@ impl AddTile for TileBag {
     }
 }
 impl DrawTile for TileBag {
-    fn draw_tile(&mut self, rng: &mut ThreadRng) -> Option<Tile> {
+    fn draw_tile(&mut self) -> Option<Tile> {
         // if there are no tiles, return nothing
         if self.tiles.len() == 0 {
             return None;
         }
 
         // randomly choose some tiles
-        let ind = rng.gen_range(0..self.tiles.len());
+        let ind = self.rng.gen_range(0..self.tiles.len());
 
         // remove them from the bag
         let tile = self.tiles.remove(ind);
@@ -61,7 +62,8 @@ impl PrintTiles for TileBag {
 
 pub fn classic_tile_bag() -> TileBag {
     //create and initilize the tile bag
-    let mut tile_bag = TileBag { tiles: Vec::new() };
+    let mut tile_rng: ThreadRng = rand::thread_rng();
+    let mut tile_bag = TileBag { tiles: Vec::new(), rng: tile_rng };
 
     // tuple of (character, points, number in bag)
     let classic_tiles: [(char, u32, usize); 26] = [
