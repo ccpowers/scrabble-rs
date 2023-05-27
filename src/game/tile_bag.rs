@@ -1,3 +1,5 @@
+use core::num;
+
 use rand::rngs::ThreadRng;
 use rand::Rng;
 #[derive(Copy, Clone)]
@@ -28,11 +30,16 @@ pub trait PrintTiles {
     fn print_tiles(&self) -> ();
 }
 
+pub trait ExchangeTiles {
+    fn exchange_tiles(&self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7];
+}
+
 impl AddTile for TileBag {
     fn add_tile(&mut self, tile: Tile) -> () {
         self.tiles.push(tile);
     }
 }
+
 impl DrawTile for TileBag {
     fn draw_tile(&mut self) -> Option<Tile> {
         // if there are no tiles, return nothing
@@ -47,6 +54,32 @@ impl DrawTile for TileBag {
         let tile = self.tiles.remove(ind);
         println!("Drew tile {}", tile.character);
         return Some(tile);
+    }
+}
+
+impl ExchangeTiles for TileBag {
+    fn exchange_tiles(&self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7] {
+        // add all tiles to bag
+        let mut num_tiles = 0;
+        for tile_option in tiles {
+            match tile_option {
+                None => (),
+                Some(t) => {
+                    self.add_tile(t);
+                    num_tiles = num_tiles + 1;
+                }
+            }
+        }
+
+        let mut ret_tiles: [Option<Tile>; 7];
+        for i in 0..num_tiles {
+            ret_tiles[i] = self.draw_tile();
+        }
+        for i in num_tiles..7 {
+            ret_tiles[i] = None;
+        }
+    
+        return ret_tiles;
     }
 }
 

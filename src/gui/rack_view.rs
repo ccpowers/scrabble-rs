@@ -3,7 +3,7 @@ use cursive::direction::Direction;
 use cursive::view::{View, CannotFocus};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout};
-use crate::game::tile_bag::{Tile};
+use crate::game::tile_bag::{Tile, TileBag};
 use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
 use super::selectable::{Selectable, SetSelected};
 
@@ -57,7 +57,7 @@ impl View for TileView {
 
 }
 
-pub fn generate_rack_views(tiles: [Option<Tile>; 7]) -> LinearLayout {
+pub fn generate_rack_views(tiles: [Option<Tile>; 7], tile_bag: TileBag) -> LinearLayout {
     let mut rack_layout: LinearLayout = LinearLayout::horizontal();
 
     for tile in tiles {
