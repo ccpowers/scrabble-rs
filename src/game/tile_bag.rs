@@ -8,6 +8,7 @@ pub struct Tile {
     pub value: u32
 }
 
+#[derive(Default)]
 pub struct TileBag {
     pub tiles: Vec<Tile>,
     pub rng: ThreadRng
@@ -31,7 +32,7 @@ pub trait PrintTiles {
 }
 
 pub trait ExchangeTiles {
-    fn exchange_tiles(&self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7];
+    fn exchange_tiles(&mut self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7];
 }
 
 impl AddTile for TileBag {
@@ -58,7 +59,7 @@ impl DrawTile for TileBag {
 }
 
 impl ExchangeTiles for TileBag {
-    fn exchange_tiles(&self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7] {
+    fn exchange_tiles(&mut self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7] {
         // add all tiles to bag
         let mut num_tiles = 0;
         for tile_option in tiles {
@@ -71,12 +72,9 @@ impl ExchangeTiles for TileBag {
             }
         }
 
-        let mut ret_tiles: [Option<Tile>; 7];
+        let mut ret_tiles: [Option<Tile>; 7] = [None; 7];
         for i in 0..num_tiles {
             ret_tiles[i] = self.draw_tile();
-        }
-        for i in num_tiles..7 {
-            ret_tiles[i] = None;
         }
     
         return ret_tiles;

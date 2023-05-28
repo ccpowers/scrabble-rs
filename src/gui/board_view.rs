@@ -1,4 +1,4 @@
-use cursive::Printer;
+use cursive::{Printer, CursiveRunnable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{LinearLayout, TextView};
 
@@ -6,6 +6,7 @@ use cursive::views::{LinearLayout, TextView};
 
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE};
 
+use crate::game::game::ScrabbleGame;
 use crate::gui::space_view::{SpaceView};
 use crate::gui::selectable::Selectable;
 pub struct BoardView {
@@ -49,22 +50,26 @@ impl cursive::view::View for BoardView {
 }
 
 // generate views to create a cohesive board
-pub fn generate_board_views(board: Board) -> LinearLayout {
+pub fn generate_board_views(siv: &mut CursiveRunnable) -> LinearLayout {
     let mut linear_layout: LinearLayout = LinearLayout::vertical()
     .child(TextView::new("   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O "));
 
-    let llr = &mut linear_layout;
-    for (r, row) in board.spaces.iter().enumerate() {
-        let mut row_layout = LinearLayout::horizontal();
-        row_layout.add_child(TextView::new(format!("{}",r)));
-        let rl = &mut row_layout;
-        for space in row {
-            //let space_view = SpaceView {value: space.value, tile: space.current_tile, selected: false, playable: true};
-            //space_view.on_event(cursive::event::MouseButton::Left);
-            rl.add_child(SpaceView {value: space.value, tile: space.current_tile, selected: Selectable {selected: false}, playable: true});
-        }
+    let user_data = siv.user_data::<ScrabbleGame>();
 
-        llr.add_child(row_layout);
+    if user_data.is_some() {
+        let llr = &mut linear_layout;
+        for (r, row) in user_data.unwrap().board.spaces.iter().enumerate() {
+            let mut row_layout = LinearLayout::horizontal();
+            row_layout.add_child(TextView::new(format!("{}",r)));
+            let rl = &mut row_layout;
+            for space in row {
+                //let space_view = SpaceView {value: space.value, tile: space.current_tile, selected: false, playable: true};
+                //space_view.on_event(cursive::event::MouseButton::Left);
+                rl.add_child(SpaceView {value: space.value, tile: space.current_tile, selected: Selectable {selected: false}, playable: true});
+            }
+    
+            llr.add_child(row_layout);
+        }
     }
 
     return linear_layout;
