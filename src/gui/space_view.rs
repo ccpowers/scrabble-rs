@@ -1,4 +1,4 @@
-use cursive::Printer;
+use cursive::{Printer, Cursive};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::direction::Direction;
 use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
@@ -7,11 +7,24 @@ use crate::game::board::{SpaceValue};
 use crate::gui::selectable::{Selectable, SetSelected};
 use crate::game::tile_bag::{Tile};
 
+use super::gui;
+
 pub struct SpaceView {
     pub value: SpaceValue,
     pub tile: Option<Tile>,
     pub selected: Selectable,
     pub playable: bool
+}
+
+pub trait PlayTile {
+    fn play_tile(&mut self, tile: Tile) -> ();
+}
+
+impl PlayTile for SpaceView {
+    fn play_tile(&mut self, tile: Tile) -> () {
+        self.tile = Some(tile);
+        self.playable = false;
+    } 
 }
 
 impl View for SpaceView {
@@ -57,7 +70,7 @@ impl View for SpaceView {
             Event::Mouse {offset: _, position: _, event: MouseEvent::Press(MouseButton::Left)} => { self.selected.set_selected(true); consumed =true},
             _ => ()
         };
-
+        
         if consumed {
             return EventResult::Consumed(None);
         } else {
