@@ -4,7 +4,7 @@ use cursive::views::{LinearLayout, TextView};
 
 
 
-use crate::game::board::{Board, SpaceValue, BOARD_SIZE};
+use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates};
 
 use crate::game::game::ScrabbleGame;
 use crate::gui::space_view::{SpaceView};
@@ -62,10 +62,10 @@ pub fn generate_board_views(siv: &mut CursiveRunnable) -> LinearLayout {
             let mut row_layout = LinearLayout::horizontal();
             row_layout.add_child(TextView::new(format!("{}",r)));
             let rl = &mut row_layout;
-            for space in row {
+            for (col, space) in row.iter().enumerate() {
                 //let space_view = SpaceView {value: space.value, tile: space.current_tile, selected: false, playable: true};
                 //space_view.on_event(cursive::event::MouseButton::Left);
-                rl.add_child(SpaceView {value: space.value, tile: space.current_tile, selected: Selectable {selected: false}, playable: true});
+                rl.add_child(SpaceView {value: space.value, tile: space.current_tile, coordinates: BoardCoordinates {x: r, y: col}, selected: Selectable {selected: false}, playable: true});
             }
     
             llr.add_child(row_layout);

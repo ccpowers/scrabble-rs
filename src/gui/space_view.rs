@@ -3,7 +3,7 @@ use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::direction::Direction;
 use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
 use cursive::view::{View, CannotFocus};
-use crate::game::board::{SpaceValue};
+use crate::game::board::{SpaceValue, BoardCoordinates};
 use crate::gui::selectable::{Selectable, SetSelected};
 use crate::game::tile_bag::{Tile};
 
@@ -11,7 +11,8 @@ pub struct SpaceView {
     pub value: SpaceValue,
     pub tile: Option<Tile>,
     pub selected: Selectable,
-    pub playable: bool
+    pub playable: bool,
+    pub coordinates: BoardCoordinates
 }
 
 impl View for SpaceView {

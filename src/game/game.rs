@@ -10,6 +10,39 @@ pub struct ScrabbleGame {
     pub board: Board
 }
 
+pub trait PlayableScrabbleGame {
+    fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool;
+}
+
+impl PlayableScrabbleGame for ScrabbleGame {
+    fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool {
+        let mut played = false;
+
+        // check if character exists on bag
+        let mut tile_ind: usize = 9;
+        for (ind, tile) in self.user_tiles.iter().enumerate() {
+            if tile.is_some() && tile.unwrap().character == c {
+                tile_ind = ind;
+            }
+        }
+
+        // check if space is available
+        if tile_ind < 9 {
+            let mut space = self.board.spaces[row][col];
+            if space.current_tile.is_none() {
+                let tile = self.user_tiles[tile_ind];
+                self.user_tiles[tile_ind] = None;
+                space.current_tile = tile;
+                played = true;
+            }
+        } else {
+            println!("Tile {} not found in user tiles", c);
+        }
+
+
+        return played;
+    }
+}
 pub fn generate_scrabble_for_one() -> ScrabbleGame {
     //create and initilize the tile bag
     let mut tile_bag = classic_tile_bag();
@@ -34,3 +67,4 @@ pub fn generate_scrabble_for_one() -> ScrabbleGame {
     return ScrabbleGame { tile_bag: tile_bag, user_tiles: user_tiles, board: board }
 
 }
+
