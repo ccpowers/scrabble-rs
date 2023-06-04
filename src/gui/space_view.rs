@@ -1,9 +1,11 @@
-use cursive::Printer;
+use cursive::views::{FocusTracker, NamedView};
+use cursive::{Printer, With};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::direction::Direction;
 use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
-use cursive::view::{View, CannotFocus};
-use crate::game::board::{SpaceValue, BoardCoordinates};
+use cursive::view::{View, CannotFocus, Nameable};
+use log::info;
+use crate::game::board::{SpaceValue, BoardCoordinates, Space};
 use crate::gui::selectable::{Selectable, SetSelected};
 use crate::game::tile_bag::{Tile};
 
@@ -13,6 +15,18 @@ pub struct SpaceView {
     pub selected: Selectable,
     pub playable: bool,
     pub coordinates: BoardCoordinates
+}
+
+impl SpaceView {
+    pub fn new(value: SpaceValue, tile: Option<Tile>, coordinates: BoardCoordinates) -> Self {
+        SpaceView {
+            value,
+            tile,
+            selected: Selectable { selected: false },
+            playable: false,
+            coordinates
+        }
+    }
 }
 
 impl View for SpaceView {
@@ -51,7 +65,7 @@ impl View for SpaceView {
         self.playable.then(EventResult::consumed).ok_or(CannotFocus)
     }
 
-    fn on_event(&mut self, event: Event) -> EventResult {
+    /*fn on_event(&mut self, event: Event) -> EventResult {
         let mut consumed: bool = false;
 
         match event {
@@ -64,6 +78,21 @@ impl View for SpaceView {
         } else {
             return EventResult::Ignored;
         }
-    }
+    }*/
 
+}
+
+pub fn generate_space_view(value: SpaceValue, tile: Option<Tile>, coordinates: BoardCoordinates) -> NamedView<FocusTracker<SpaceView>> {
+    return SpaceView::new(value, tile, coordinates)
+        .wrap_with(cursive::views::FocusTracker::new)
+        /*.on_focus(|view| {
+            view.selected.set_selected(true);
+            info!("Selected space {} {}", view.coordinates.x, view.coordinates.y);
+            return EventResult::Ignored;
+        })
+        .on_focus_lost(|view| {
+            view.selected.set_selected(false);
+            return EventResult::Ignored;
+        })*/
+        .with_name("space");
 }

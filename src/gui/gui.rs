@@ -64,7 +64,7 @@ fn play_tile(siv: &mut Cursive, c: char) {
     // see if the tile exists in the game
     let mut game = siv.take_user_data::<ScrabbleGame>().unwrap();
 
-    game.attempt_tile_play(c, 3, 3);
+    game.attempt_tile_play(c, row, col);
 
     // make a copy of the new tiles
     let user_tiles = game.user_tiles.clone();

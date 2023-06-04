@@ -7,7 +7,7 @@ use cursive::views::{LinearLayout, TextView};
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates};
 
 use crate::game::game::ScrabbleGame;
-use crate::gui::space_view::{SpaceView};
+use crate::gui::space_view::{SpaceView, generate_space_view};
 use crate::gui::selectable::Selectable;
 pub struct BoardView {
     pub board: Board,
@@ -65,7 +65,8 @@ pub fn generate_board_views(siv: &mut CursiveRunnable) -> LinearLayout {
             for (col, space) in row.iter().enumerate() {
                 //let space_view = SpaceView {value: space.value, tile: space.current_tile, selected: false, playable: true};
                 //space_view.on_event(cursive::event::MouseButton::Left);
-                rl.add_child(SpaceView {value: space.value, tile: space.current_tile, coordinates: BoardCoordinates {x: r, y: col}, selected: Selectable {selected: false}, playable: true});
+                rl.add_child(SpaceView {value: space.value, tile: space.current_tile, playable: false, selected: Selectable {selected: false}, coordinates: BoardCoordinates { x: r, y: col }});
+                //rl.add_child(generate_space_view(space.value, space.current_tile, BoardCoordinates {x: r, y: col}));
             }
     
             llr.add_child(row_layout);

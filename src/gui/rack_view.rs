@@ -75,9 +75,6 @@ pub fn exchange_tiles(s: &mut Cursive) {
             view.get_mut().add_child(TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
         }
     });
-    
-    // put new tiles at back of rack view
-
 }
 
 pub fn generate_rack_views(siv: &mut CursiveRunnable) -> NamedView<LinearLayout> {
