@@ -1,3 +1,5 @@
+use log::info;
+
 use crate::game::tile_bag::Tile;
 
 #[derive(Copy, Clone)]
@@ -76,7 +78,7 @@ impl PlaceTiles for Board {
                     current_space.occupied = true;
                     tile_placed = true;
                     self.spaces[current_coords.x][current_coords.y] = current_space;
-                    println!("Placed tile {} at space {} {}", tile.character, current_coords.x, current_coords.y);
+                    info!("Placed tile {} at space {} {}", tile.character, current_coords.x, current_coords.y);
                 }
                 // move to next space
                 current_coords = current_coords.increment(direction);
@@ -128,5 +130,5 @@ pub fn print_board(board: &Board) -> () {
         board_string.push('\n');
     }
 
-    println!("{}", board_string);
+    info!("{}", board_string);
 }

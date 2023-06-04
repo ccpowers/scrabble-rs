@@ -1,5 +1,5 @@
 use rand::rngs::ThreadRng;
-
+use log::info;
 use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile};
 use super::board::{Board, BoardCoordinates, create_classic_board, PlaceTiles, BoardDirection};
 
@@ -36,7 +36,7 @@ impl PlayableScrabbleGame for ScrabbleGame {
                 played = true;
             }
         } else {
-            println!("Tile {} not found in user tiles", c);
+            info!("Tile {} not found in user tiles", c);
         }
 
 
