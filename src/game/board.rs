@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+
 use log::info;
 
 use crate::game::tile_bag::Tile;
@@ -48,12 +50,17 @@ pub trait Increment {
 
 impl Increment for BoardCoordinates {
     fn increment(&self, direction: BoardDirection) -> BoardCoordinates {
-        return match direction {
+        let mut ret = match direction {
             BoardDirection::North => BoardCoordinates {x: self.x - 1, y: self.y},
             BoardDirection::South => BoardCoordinates {x: self.x + 1, y: self.y},
             BoardDirection::East => BoardCoordinates {x: self.x, y: self.y - 1},
             BoardDirection::West => BoardCoordinates {x: self.x, y: self.y + 1}
         };
+        // make sure we don't go out of bounds
+        //ret.x = min(ret.x, 0);
+        //ret.y = min(ret.y, 0);
+        info!("Board coordinates are {} {}", ret.x, ret.y);
+        return ret;
     }
 }
 pub struct Score {

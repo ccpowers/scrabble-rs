@@ -82,8 +82,9 @@ impl View for SpaceView {
 
 }
 
-pub fn generate_space_view(value: SpaceValue, tile: Option<Tile>, coordinates: BoardCoordinates) -> NamedView<FocusTracker<SpaceView>> {
-    return SpaceView::new(value, tile, coordinates)
+pub fn generate_space_view(value: SpaceValue, tile: Option<Tile>, coordinates: BoardCoordinates) -> SpaceView {
+    return SpaceView {value: value, tile: tile, coordinates: coordinates, playable: false, selected: Selectable {selected: false}};
+    /*return SpaceView::new(value, tile, coordinates)
         .wrap_with(cursive::views::FocusTracker::new)
         /*.on_focus(|view| {
             view.selected.set_selected(true);
@@ -94,5 +95,5 @@ pub fn generate_space_view(value: SpaceValue, tile: Option<Tile>, coordinates: B
             view.selected.set_selected(false);
             return EventResult::Ignored;
         })*/
-        .with_name("space");
+        .with_name("space");*/
 }
