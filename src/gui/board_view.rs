@@ -1,14 +1,13 @@
 use cursive::direction::Direction;
-use cursive::event::{Key, EventResult, Callback};
+use cursive::event::{Key, Event, EventResult, Callback};
 use cursive::view::CannotFocus;
-use cursive::{Printer, CursiveRunnable, Cursive, event::Event};
+use cursive::{Printer, Cursive};
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use cursive::views::{LinearLayout, TextView, NamedView};
+use cursive::views::{NamedView};
 use log::info;
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::Tile;
-use crate::gui::space_view::{generate_space_view};
 use super::rack_view::RackView;
 
 
@@ -16,12 +15,14 @@ pub struct BoardView {
     pub board: Board,
     pub selected: BoardCoordinates
 }
+
 impl BoardView {
     pub fn set_board(&mut self, board: Board) {
         self.board = board;
     }
 }
-fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
+
+fn create_play_callback(c: char, coords: BoardCoordinates) -> Callback {
     Callback::from_fn(move |cursive: &mut Cursive| {
         let mut user_tiles: [Option<Tile>; 7] = [None;7];
         let mut board: Option<Board> = None;
@@ -29,7 +30,6 @@ fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
             game.attempt_tile_play(c, coords.x, coords.y);
             user_tiles = game.user_tiles.clone();
             board = Some(game.board.clone());
-            print_board(&game.board.clone());
         });
 
         // re-draw rack and board
@@ -50,9 +50,6 @@ fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
     })
 }
 
-pub fn place_letter(_siv: &mut Cursive, c: char, coordinates: BoardCoordinates) {
-    info!("Gonna play {} at {} {}", c, coordinates.x, coordinates.y);
-}
 impl cursive::view::View for BoardView {
     fn draw(&self, printer: &Printer) -> () {
         //info!("Draw board");
@@ -100,7 +97,7 @@ impl cursive::view::View for BoardView {
             Event::Key(Key::Right) => {consumed = true; self.selected = self.selected.increment(BoardDirection::West);},
             Event::Key(Key::Up) => {consumed = true; self.selected = self.selected.increment(BoardDirection::North);},
             Event::Key(Key::Down) => {consumed = true; self.selected = self.selected.increment(BoardDirection::South);},
-            Event::Char(c) => {consumed = true; cb = Some(create_callback(c, self.selected.clone())); }
+            Event::Char(c) => {consumed = true; cb = Some(create_play_callback(c, self.selected.clone())); }
             _ => ()
         };
 
@@ -120,33 +117,6 @@ impl cursive::view::View for BoardView {
     }
 }
 
-// generate views to create a cohesive board
-pub fn generate_board_views(siv: &mut CursiveRunnable) -> LinearLayout {
-    let mut linear_layout: LinearLayout = LinearLayout::vertical()
-    .child(TextView::new("   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O "));
-
-    let user_data = siv.user_data::<ScrabbleGame>();
-
-    if user_data.is_some() {
-        let llr = &mut linear_layout;
-        for (r, row) in user_data.unwrap().board.spaces.iter().enumerate() {
-            let mut row_layout = LinearLayout::horizontal();
-            row_layout.add_child(TextView::new(format!("{}",r)));
-            let rl = &mut row_layout;
-            for (col, space) in row.iter().enumerate() {
-                let space_view = generate_space_view(space.value, space.current_tile, BoardCoordinates { x: r, y: col });//SpaceView {value: space.value, tile: space.current_tile, selected: Selectable { selected: false }, playable: true, coordinates: BoardCoordinates { x: 0, y: 0 }};
-                //space_view.on_event(cursive::event::MouseButton::Left);
-                //rl.add_child(SpaceView {value: space.value, tile: space.current_tile, playable: false, selected: Selectable {selected: false}, coordinates: BoardCoordinates { x: r, y: col }});
-                //rl.add_child(generate_space_view(space.value, space.current_tile, BoardCoordinates {x: r, y: col}));
-                rl.add_child(space_view);
-            }
-    
-            llr.add_child(row_layout);
-        }
-    }
-
-    return linear_layout;
-}
 
 pub fn generate_board_view(board: Board) -> BoardView {
     return BoardView {board: board, selected: BoardCoordinates { x: 0, y: 0 }};

@@ -1,16 +1,10 @@
 use cursive::views::{TextView, Dialog, LinearLayout, DummyView, Panel};
-use cursive::{CursiveRunnable, Cursive};
+use cursive::{CursiveRunnable};
 use cursive::align::HAlign;
 use cursive::view::{Resizable, Nameable};
-use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
-
-
+use crate::game::game::{ScrabbleGame};
 use crate::gui::rack_view::{generate_rack_views};
-
-use super::board_view::generate_board_view;
-
-
-use super::space_view::SpaceView;
+use crate::gui::board_view::generate_board_view;
 
 pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
     // show some stuff with cursive
@@ -22,7 +16,7 @@ pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
     let board_view = generate_board_view(board).with_name("board");
     let board_panel = Panel::new(board_view);
      
-
+    // create rack view
     let rack_panel = Panel::new(generate_rack_views(&mut siv));
     
     // create the score view
@@ -42,51 +36,5 @@ pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
          .h_align(HAlign::Center),
      );
 
-     // add global callbacks for each letter in the alphabet
-     // can't find a way to do this with access to Cursive object and event 
-     let letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']; // could probably get this from tile bag?
-     for letter in letters {
-        siv.add_global_callback(letter, move |s| play_tile(s, letter));
-     }
-
      return siv;
-}
-
-fn play_tile(siv: &mut Cursive, c: char) {
-    // find selected row and col
-    let mut row = 0;
-    let mut col = 0;
-    siv.call_on_all_named("space", |view: &mut SpaceView| {
-        if view.selected.selected {
-            row = view.coordinates.x;
-            col = view.coordinates.y;
-        }
-    });
-
-    // see if the tile exists in the game
-    let mut game = siv.take_user_data::<ScrabbleGame>().unwrap();
-
-    game.attempt_tile_play(c, row, col);
-
-    // make a copy of the new tiles
-    let _user_tiles = game.user_tiles.clone();
-
-    // make a copy of the new board
-    let board = game.board.clone();
-
-    siv.set_user_data(game);
-
-    // set content on board and rack
-    /*siv.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
-        for tile_index in 0..6 {
-            view.get_mut().remove_child(tile_index);
-            view.get_mut().add_child(TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
-        }
-    });*/
-
-    // todo - find selected item in board if it exists
-    siv.call_on_all_named("space", |view: &mut SpaceView| {
-        view.tile = board.spaces[view.coordinates.x][view.coordinates.y].current_tile;
-    })
-
 }

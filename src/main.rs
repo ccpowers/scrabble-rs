@@ -15,5 +15,4 @@ fn main() {
     let scrabble_game: ScrabbleGame = generate_scrabble_for_one();
     let mut scrabble_gui = generate_scrabble_gui(scrabble_game);
     scrabble_gui.run();
-
 }

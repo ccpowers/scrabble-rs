@@ -44,22 +44,6 @@ impl View for RackView {
     fn take_focus(&mut self, _: Direction) -> Result<EventResult, CannotFocus> {
         return Ok(EventResult::Consumed(None));
     }
-
-    /*fn on_event(&mut self, event: Event) -> EventResult {
-        let mut consumed: bool = false;
-
-        match event {
-            Event::Mouse {offset: _, position: _, event: MouseEvent::Press(MouseButton::Left)} => { self.selected.set_selected(true); consumed =true},
-            _ => ()
-        };
-
-        if consumed {
-            return EventResult::Consumed(None);
-        } else {
-            return EventResult::Ignored;
-        }
-    }*/
-
 }
 
 pub fn exchange_tiles(s: &mut Cursive) {

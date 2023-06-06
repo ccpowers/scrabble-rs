@@ -12,7 +12,4 @@ Terminal based scrabble for one, just for fun. Based on scrabble description fou
 -- Add dictionary of allowed words
 -- Add scoring algorithm
 -- Add wildcard tiles
-
-- Interface:
--- Add tile rack display
--- Add score display
+-- Add restrictions to only place tiles on allowed spaces
