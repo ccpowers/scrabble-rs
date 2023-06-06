@@ -8,7 +8,7 @@ use crate::gui::board_view::{generate_board_views};
 use crate::gui::rack_view::{generate_rack_views};
 
 use super::board_view::generate_board_view;
-use super::rack_view::TileView;
+use super::rack_view::RackView;
 use super::selectable::Selectable;
 use super::space_view::SpaceView;
 
@@ -77,12 +77,12 @@ fn play_tile(siv: &mut Cursive, c: char) {
     siv.set_user_data(game);
 
     // set content on board and rack
-    siv.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
+    /*siv.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
         for tile_index in 0..6 {
             view.get_mut().remove_child(tile_index);
             view.get_mut().add_child(TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
         }
-    });
+    });*/
 
     // todo - find selected item in board if it exists
     siv.call_on_all_named("space", |view: &mut SpaceView| {

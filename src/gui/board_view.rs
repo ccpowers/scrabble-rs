@@ -17,6 +17,7 @@ use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::Tile;
 use crate::gui::space_view::{generate_space_view};
 
+use super::rack_view::RackView;
 use super::selectable::Selectable;
 
 pub struct BoardView {
@@ -40,11 +41,8 @@ fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
         });
 
         // re-draw rack and board
-        cursive.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
-            for tile_index in 0..7 {
-                view.get_mut().remove_child(tile_index);
-                view.get_mut().add_child(super::rack_view::TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
-            }
+        cursive.call_on_name("rack", |view: &mut NamedView<RackView>| {
+            view.get_mut().set_tiles(user_tiles);
         });
 
         cursive.call_on_name("board", |view: &mut BoardView| {
