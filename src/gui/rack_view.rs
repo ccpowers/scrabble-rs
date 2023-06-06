@@ -83,7 +83,7 @@ pub fn generate_rack_views(siv: &mut CursiveRunnable) -> NamedView<LinearLayout>
 
     let mut user_data = siv.user_data::<ScrabbleGame>();
     if user_data.is_some() {
-        for tile_index in 0..6 {
+        for tile_index in 0..7 {
             rack.get_mut().add_child(TileView {tiles: user_data.as_mut().unwrap().user_tiles, tile_index, selected: Selectable {selected: false}});
         }
     };

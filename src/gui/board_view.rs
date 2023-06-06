@@ -26,10 +26,6 @@ pub struct BoardView {
 impl BoardView {
     pub fn set_board(&mut self, board: Board) {
         self.board = board;
-        info!("Setting board");
-        print_board(&board);
-        info!("Set board");
-        print_board(&self.board);
     }
 }
 fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
@@ -45,7 +41,7 @@ fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
 
         // re-draw rack and board
         cursive.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
-            for tile_index in 0..6 {
+            for tile_index in 0..7 {
                 view.get_mut().remove_child(tile_index);
                 view.get_mut().add_child(super::rack_view::TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
             }
@@ -69,8 +65,8 @@ pub fn place_letter(_siv: &mut Cursive, c: char, coordinates: BoardCoordinates) 
 }
 impl cursive::view::View for BoardView {
     fn draw(&self, printer: &Printer) -> () {
-        info!("Draw board");
-        print_board(&self.board);
+        //info!("Draw board");
+        //print_board(&self.board);
         printer.print((0,0), "   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O ");
         for (r, row) in self.board.spaces.iter().enumerate() {
             let mut row_str = format!("{}", r + 1);
@@ -106,7 +102,7 @@ impl cursive::view::View for BoardView {
     }
 
     fn on_event(&mut self, event: Event) -> EventResult {
-        info!("Board got event");
+        //info!("Board got event");
         let mut consumed: bool = false;
         let mut cb = None;
         match event {

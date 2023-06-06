@@ -2,7 +2,7 @@ use rand::rngs::ThreadRng;
 use log::info;
 use crate::game::board::print_board;
 
-use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile};
+use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
 use super::board::{Board, BoardCoordinates, create_classic_board, PlaceTiles, BoardDirection};
 
 
@@ -22,7 +22,9 @@ impl PlayableScrabbleGame for ScrabbleGame {
         let mut played = false;
 
         // check if character exists on bag
-        let mut tile_ind: usize = 9;
+        print_user_tiles(self.user_tiles);
+        let max_tile_ind: usize = self.user_tiles.len() + 1;
+        let mut tile_ind: usize = max_tile_ind;
         for (ind, tile) in self.user_tiles.iter().enumerate() {
             if tile.is_some() && tile.unwrap().character == c {
                 tile_ind = ind;
@@ -32,13 +34,14 @@ impl PlayableScrabbleGame for ScrabbleGame {
 
         // check if space is available
         // TODO make this a static const
-        if tile_ind < 9 {
+        if tile_ind < max_tile_ind {
             let mut space = self.board.spaces[row][col];
 
             if space.current_tile.is_none() {
                 let tile = self.user_tiles[tile_ind];
-                if tile.is_some() { info!("Tile is {}", tile.unwrap().character)};
+                if tile.is_some() { info!("Tile is {:?}", tile)};
                 self.user_tiles[tile_ind] = None;
+                print_user_tiles(self.user_tiles);
                 space.current_tile = tile;
                 played = true;
                 info!("Space has tile {}", space.current_tile.unwrap().character);
