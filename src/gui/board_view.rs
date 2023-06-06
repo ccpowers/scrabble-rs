@@ -1,49 +1,76 @@
 use std::rc::Rc;
 
+use cursive::View;
 use cursive::direction::Direction;
 use cursive::event::{Key, EventResult, Callback};
 use cursive::view::CannotFocus;
 use cursive::{Printer, CursiveRunnable, Cursive, event::Event};
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use cursive::views::{LinearLayout, TextView};
+use cursive::views::{LinearLayout, TextView, NamedView};
 use log::info;
 
 
 
-use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection};
+use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
 
-use crate::game::game::ScrabbleGame;
+use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
+use crate::game::tile_bag::Tile;
 use crate::gui::space_view::{generate_space_view};
+
+use super::selectable::Selectable;
 
 pub struct BoardView {
     pub board: Board,
     pub selected: BoardCoordinates
 }
-
-fn create_callback(c: char, coords: BoardCoordinates) -> /*Rc<dyn Fn(&mut Cursive)>*/ Callback {
-    // Function implementation goes here
-    // ...
-    // Create the callback and return it
+impl BoardView {
+    pub fn set_board(&mut self, board: Board) {
+        self.board = board;
+        info!("Setting board");
+        print_board(&board);
+        info!("Set board");
+        print_board(&self.board);
+    }
+}
+fn create_callback(c: char, coords: BoardCoordinates) -> Callback {
     Callback::from_fn(move |cursive: &mut Cursive| {
-        println!("what {} {} {}", c, coords.x, coords.y);
+        let mut user_tiles: [Option<Tile>; 7] = [None;7];
+        let mut board: Option<Board> = None;
+        cursive.with_user_data(|game: &mut ScrabbleGame| {
+            game.attempt_tile_play(c, coords.x, coords.y);
+            user_tiles = game.user_tiles.clone();
+            board = Some(game.board.clone());
+            print_board(&game.board.clone());
+        });
+
+        // re-draw rack and board
+        cursive.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
+            for tile_index in 0..6 {
+                view.get_mut().remove_child(tile_index);
+                view.get_mut().add_child(super::rack_view::TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
+            }
+        });
+
+        cursive.call_on_name("board", |view: &mut BoardView| {
+            if board.is_some() {
+                info!("Setting board");
+                view.set_board(board.unwrap());
+                //view.
+            } else {
+                info!("No board to set");
+            }
+        });
+
     })
 }
-
-/*pub fn create_letter_cb(c: char, coords: BoardCoordinates) -> Callback {
-    let cb = move |_s| {
-        println!("{} {} {}",c, coords.x, coords.y);
-    };
-
-    return Callback::from_fn(Rc::new(|_s| {
-        println!("{} {} {}",c, coords.x, coords.y);
-    }));
-}*/
 
 pub fn place_letter(_siv: &mut Cursive, c: char, coordinates: BoardCoordinates) {
     info!("Gonna play {} at {} {}", c, coordinates.x, coordinates.y);
 }
 impl cursive::view::View for BoardView {
     fn draw(&self, printer: &Printer) -> () {
+        info!("Draw board");
+        print_board(&self.board);
         printer.print((0,0), "   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O ");
         for (r, row) in self.board.spaces.iter().enumerate() {
             let mut row_str = format!("{}", r + 1);
@@ -51,6 +78,7 @@ impl cursive::view::View for BoardView {
                 row_str.push(' ');
             }
             printer.print((0, r + 1), &row_str.to_string());
+
             for (c, space) in row.iter().enumerate() {
                 let text = match space.current_tile {
                     Some(c) => format!("[{}]", c. character),

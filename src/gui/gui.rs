@@ -1,7 +1,7 @@
 use cursive::views::{TextView, Dialog, LinearLayout, DummyView, Panel, NamedView};
 use cursive::{CursiveRunnable, Cursive};
 use cursive::align::HAlign;
-use cursive::view::{Resizable};
+use cursive::view::{Resizable, Nameable};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::Tile;
 use crate::gui::board_view::{generate_board_views};
@@ -19,7 +19,7 @@ pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
     siv.set_user_data::<ScrabbleGame>(game);
 
     // create the board view
-    let board_view = generate_board_view(board);
+    let board_view = generate_board_view(board).with_name("board");
     let board_panel = Panel::new(board_view);
      
 

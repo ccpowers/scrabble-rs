@@ -1,5 +1,7 @@
 use rand::rngs::ThreadRng;
 use log::info;
+use crate::game::board::print_board;
+
 use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile};
 use super::board::{Board, BoardCoordinates, create_classic_board, PlaceTiles, BoardDirection};
 
@@ -16,6 +18,7 @@ pub trait PlayableScrabbleGame {
 
 impl PlayableScrabbleGame for ScrabbleGame {
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool {
+        info!("Attempting to play tile {} at {} {}", c, row, col);
         let mut played = false;
 
         // check if character exists on bag
@@ -25,15 +28,24 @@ impl PlayableScrabbleGame for ScrabbleGame {
                 tile_ind = ind;
             }
         }
+        info!("Tile index: {}", tile_ind);
 
         // check if space is available
+        // TODO make this a static const
         if tile_ind < 9 {
             let mut space = self.board.spaces[row][col];
+
             if space.current_tile.is_none() {
                 let tile = self.user_tiles[tile_ind];
+                if tile.is_some() { info!("Tile is {}", tile.unwrap().character)};
                 self.user_tiles[tile_ind] = None;
                 space.current_tile = tile;
                 played = true;
+                info!("Space has tile {}", space.current_tile.unwrap().character);
+                print_board(&self.board);
+                self.board.spaces[row][col] = space;
+                print_board(&self.board);
+
             }
         } else {
             info!("Tile {} not found in user tiles", c);
