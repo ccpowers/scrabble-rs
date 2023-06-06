@@ -14,9 +14,23 @@ pub struct ScrabbleGame {
 
 pub trait PlayableScrabbleGame {
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool;
+    fn draw_tiles(&mut self) -> bool;
 }
 
 impl PlayableScrabbleGame for ScrabbleGame {
+    fn draw_tiles(& mut self) -> bool {
+        let mut drawn = false;
+
+        print_user_tiles(self.user_tiles);
+        for ind in 0..self.user_tiles.len() {
+            if self.user_tiles[ind].is_none() {
+                self.user_tiles[ind] = self.tile_bag.draw_tile();
+            }
+        }
+        print_user_tiles(self.user_tiles);
+        return drawn; // todo fix this
+
+    }
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool {
         info!("Attempting to play tile {} at {} {}", c, row, col);
         let mut played = false;
