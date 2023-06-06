@@ -3,7 +3,7 @@ use log::info;
 use crate::game::board::print_board;
 
 use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
-use super::board::{Board, BoardCoordinates, create_classic_board, PlaceTiles, BoardDirection};
+use super::board::{Board, create_classic_board};
 
 
 pub struct ScrabbleGame {
@@ -19,7 +19,7 @@ pub trait PlayableScrabbleGame {
 
 impl PlayableScrabbleGame for ScrabbleGame {
     fn draw_tiles(& mut self) -> bool {
-        let mut drawn = false;
+        let drawn = false;
 
         print_user_tiles(self.user_tiles);
         for ind in 0..self.user_tiles.len() {
@@ -29,8 +29,8 @@ impl PlayableScrabbleGame for ScrabbleGame {
         }
         print_user_tiles(self.user_tiles);
         return drawn; // todo fix this
-
     }
+
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool {
         info!("Attempting to play tile {} at {} {}", c, row, col);
         let mut played = false;
@@ -72,6 +72,7 @@ impl PlayableScrabbleGame for ScrabbleGame {
         return played;
     }
 }
+
 pub fn generate_scrabble_for_one() -> ScrabbleGame {
     //create and initilize the tile bag
     let mut tile_bag = classic_tile_bag();
@@ -84,16 +85,8 @@ pub fn generate_scrabble_for_one() -> ScrabbleGame {
     }
 
     // create the board
-    let mut board: Board = create_classic_board();
-
-    // place our tile
-    let mut tile_vec: Vec<Tile> = Vec::new();
-    tile_vec.push(Tile {character: 'c', value: 100});
-    tile_vec.push(Tile {character: 'd', value: 100});
-    tile_vec.push(Tile {character: 'e', value: 100});
-    let _ = &mut board.place_tiles(&tile_vec, BoardCoordinates {x: 7, y: 7}, BoardDirection::North);
+    let board: Board = create_classic_board();
 
     return ScrabbleGame { tile_bag: tile_bag, user_tiles: user_tiles, board: board }
-
 }
 

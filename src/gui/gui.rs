@@ -1,15 +1,15 @@
-use cursive::views::{TextView, Dialog, LinearLayout, DummyView, Panel, NamedView};
+use cursive::views::{TextView, Dialog, LinearLayout, DummyView, Panel};
 use cursive::{CursiveRunnable, Cursive};
 use cursive::align::HAlign;
 use cursive::view::{Resizable, Nameable};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
-use crate::game::tile_bag::Tile;
-use crate::gui::board_view::{generate_board_views};
+
+
 use crate::gui::rack_view::{generate_rack_views};
 
 use super::board_view::generate_board_view;
-use super::rack_view::RackView;
-use super::selectable::Selectable;
+
+
 use super::space_view::SpaceView;
 
 pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
@@ -69,7 +69,7 @@ fn play_tile(siv: &mut Cursive, c: char) {
     game.attempt_tile_play(c, row, col);
 
     // make a copy of the new tiles
-    let user_tiles = game.user_tiles.clone();
+    let _user_tiles = game.user_tiles.clone();
 
     // make a copy of the new board
     let board = game.board.clone();

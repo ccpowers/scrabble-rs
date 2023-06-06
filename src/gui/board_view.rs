@@ -1,6 +1,3 @@
-use std::rc::Rc;
-
-use cursive::View;
 use cursive::direction::Direction;
 use cursive::event::{Key, EventResult, Callback};
 use cursive::view::CannotFocus;
@@ -8,17 +5,12 @@ use cursive::{Printer, CursiveRunnable, Cursive, event::Event};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{LinearLayout, TextView, NamedView};
 use log::info;
-
-
-
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
-
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::Tile;
 use crate::gui::space_view::{generate_space_view};
-
 use super::rack_view::RackView;
-use super::selectable::Selectable;
+
 
 pub struct BoardView {
     pub board: Board,

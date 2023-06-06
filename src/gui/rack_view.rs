@@ -1,12 +1,12 @@
-use cursive::{Printer, CursiveRunnable, With, Cursive};
+use cursive::{Printer, CursiveRunnable, Cursive};
 use cursive::direction::Direction;
 use cursive::view::{View, CannotFocus, Nameable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout, NamedView};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
-use crate::game::tile_bag::{Tile, TileBag, ExchangeTiles};
-use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
-use super::selectable::{Selectable, SetSelected};
+use crate::game::tile_bag::{Tile, ExchangeTiles};
+use cursive::event::{EventResult};
+
 
 pub struct RackView {
     pub tiles: [Option<Tile>; 7],

@@ -1,12 +1,12 @@
-use cursive::views::{FocusTracker, NamedView};
-use cursive::{Printer, With};
+
+use cursive::{Printer};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::direction::Direction;
-use cursive::event::{EventResult, Event, MouseButton, MouseEvent};
-use cursive::view::{View, CannotFocus, Nameable};
-use log::info;
-use crate::game::board::{SpaceValue, BoardCoordinates, Space};
-use crate::gui::selectable::{Selectable, SetSelected};
+use cursive::event::{EventResult};
+use cursive::view::{View, CannotFocus};
+
+use crate::game::board::{SpaceValue, BoardCoordinates};
+use crate::gui::selectable::{Selectable};
 use crate::game::tile_bag::{Tile};
 
 pub struct SpaceView {
