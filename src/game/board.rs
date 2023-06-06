@@ -48,19 +48,24 @@ pub trait Increment {
     fn increment(&self, direction: BoardDirection) -> BoardCoordinates;
 }
 
+// this could be static
 impl Increment for BoardCoordinates {
     fn increment(&self, direction: BoardDirection) -> BoardCoordinates {
-        let mut ret = match direction {
-            BoardDirection::North => BoardCoordinates {x: self.x - 1, y: self.y},
-            BoardDirection::South => BoardCoordinates {x: self.x + 1, y: self.y},
-            BoardDirection::East => BoardCoordinates {x: self.x, y: self.y - 1},
-            BoardDirection::West => BoardCoordinates {x: self.x, y: self.y + 1}
+        let mut x: i32 = self.x.try_into().unwrap();
+        let mut y: i32 = self.y.try_into().unwrap();
+
+        match direction {
+            BoardDirection::East => {x = x - 1;},
+            BoardDirection::West => {x = x + 1},
+            BoardDirection::North => {y = y -1},
+            BoardDirection::South => {y = y + 1}
         };
         // make sure we don't go out of bounds
-        //ret.x = min(ret.x, 0);
-        //ret.y = min(ret.y, 0);
-        info!("Board coordinates are {} {}", ret.x, ret.y);
-        return ret;
+        let board_max: i32 = TryInto::<i32>::try_into(BOARD_SIZE).unwrap() - 1;
+        x = min(max(x, 0), board_max);
+        y = min(max(y, 0), board_max);
+        info!("Board coordinates are {} {}", x, y);
+        return BoardCoordinates {x: x.try_into().unwrap(), y: y.try_into().unwrap()};
     }
 }
 pub struct Score {
