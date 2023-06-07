@@ -53,7 +53,7 @@ impl DrawTile for TileBag {
 
         // remove them from the bag
         let tile = self.tiles.remove(ind);
-        //println!("Drew tile {}", tile.character);
+        println!("Drew tile {}", tile.character);
         return Some(tile);
     }
 }

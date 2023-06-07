@@ -7,36 +7,7 @@ use super::board::{Board, BoardCoordinates, create_classic_board, PlaceTiles, Bo
 pub struct ScrabbleGame {
     pub tile_bag: TileBag,
     pub user_tiles: [Option<Tile>; 7],
-    pub board: Board,
-}
-
-pub trait AttemptTilePlay {
-    fn attempt_tile_play(&mut self, c: char) -> bool;
-}
-
-impl AttemptTilePlay for ScrabbleGame {
-    fn attempt_tile_play(&mut self, c: char) -> bool {
-        let mut played = false;
-        let mut play_tile = None;
-        // check if character is in user tiles
-        let mut tile_ind = 8; // todo this should be a max index or something
-        for (ind, tile) in self.user_tiles.iter().enumerate() {
-           if tile.is_some() && c == tile.unwrap().character {
-               tile_ind = ind;
-           }
-        }
-        if tile_ind < 8 {
-           play_tile = self.user_tiles[tile_ind];
-           self.user_tiles[tile_ind] = None;
-        }
-
-        if play_tile.is_some() {
-            self.board.spaces[0][0].current_tile = play_tile;
-            played = true;
-        }
-
-        return played;
-    }
+    pub board: Board
 }
 
 pub fn generate_scrabble_for_one() -> ScrabbleGame {

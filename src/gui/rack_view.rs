@@ -3,8 +3,7 @@ use cursive::direction::Direction;
 use cursive::view::{View, CannotFocus, Nameable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout, NamedView};
-use crate::controller::exchange_tiles;
-use crate::game::game::{ScrabbleGame, AttemptTilePlay};
+use crate::game::game::ScrabbleGame;
 use crate::game::tile_bag::{Tile, TileBag, ExchangeTiles};
 use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
 use super::selectable::{Selectable, SetSelected};
@@ -61,14 +60,36 @@ impl View for TileView {
 
 }
 
-pub fn generate_rack_views(user_tiles: &[Option<Tile>; 7]) -> NamedView<LinearLayout> {
+pub fn exchange_tiles(s: &mut Cursive) {
+    // exchange tiles
+    let mut user_tiles: [Option<Tile>; 7] = [None; 7];
+    s.with_user_data(|scrabble_game: &mut ScrabbleGame| {
+        scrabble_game.user_tiles = scrabble_game.tile_bag.exchange_tiles(scrabble_game.user_tiles);
+        user_tiles = scrabble_game.user_tiles.clone();
+    });
+    
+    // get list of selected tiles from rack view
+    s.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
+        for tile_index in 0..5 {
+            view.get_mut().remove_child(tile_index);
+            view.get_mut().add_child(TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
+        }
+    });
+    
+    // put new tiles at back of rack view
+
+}
+
+pub fn generate_rack_views(siv: &mut CursiveRunnable) -> NamedView<LinearLayout> {
     let mut rack_layout: NamedView<LinearLayout> = LinearLayout::horizontal().with_name("rack_wrapper");
     let mut rack: NamedView<LinearLayout> = LinearLayout::horizontal().with_name("rack");
 
-    //let mut user_data = siv.user_data::<ScrabbleGame>();
-    for tile_index in 0..6 {
-        rack.get_mut().add_child(TileView {tiles: *user_tiles, tile_index, selected: Selectable {selected: false}});
-    }
+    let mut user_data = siv.user_data::<ScrabbleGame>();
+    if user_data.is_some() {
+        for tile_index in 0..6 {
+            rack.get_mut().add_child(TileView {tiles: user_data.as_mut().unwrap().user_tiles, tile_index, selected: Selectable {selected: false}});
+        }
+    };
 
     rack_layout.get_mut().add_child(rack);
     rack_layout.get_mut().add_child(Button::new("Exchange", exchange_tiles));
