@@ -1,9 +1,12 @@
+use std::collections::HashMap;
+use std::iter::Map;
+
 use rand::rngs::ThreadRng;
 use log::info;
 use crate::game::board::print_board;
 
 use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
-use super::board::{Board, create_classic_board};
+use super::board::{Board, create_classic_board, BoardCoordinates, BoardDirection, Increment};
 
 
 pub struct ScrabbleGame {
@@ -15,7 +18,7 @@ pub struct ScrabbleGame {
 pub trait PlayableScrabbleGame {
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool;
     fn draw_tiles(&mut self) -> bool;
-    fn score(&self) -> i32;
+    fn score(&self) -> u32;
 }
 
 impl PlayableScrabbleGame for ScrabbleGame {
@@ -73,8 +76,33 @@ impl PlayableScrabbleGame for ScrabbleGame {
         return played;
     }
 
-    fn score(&self) -> i32 {
+    fn score(&self) -> u32 {
         let mut score = 0;
+
+        let start = BoardCoordinates {x: 8, y: 8};
+        let mut to_check: Vec<BoardCoordinates> = [start].to_vec();
+        let mut checked: HashMap<BoardCoordinates, bool> = HashMap::new();
+
+        info!("Going to start checks. len: {}", to_check.len());
+        while to_check.len() > 0 {
+            // pop the first element out of the vector
+            let coords = to_check.pop();
+
+            if coords.is_some() && !checked.contains_key(&coords.unwrap()) {
+                info!("Checking {} {}", coords.unwrap().x, coords.unwrap().y);
+                checked.insert(coords.unwrap(), true);
+                let space = self.board.spaces[coords.unwrap().x][coords.unwrap().y];
+                if space.current_tile.is_some() {
+                    score = score + space.current_tile.unwrap().value * space.value.letter_multiplier();
+                }
+
+                // add the neighbors to the vector
+                for direction in [BoardDirection::North, BoardDirection::South, BoardDirection::East, BoardDirection::West] {
+                    to_check.push(coords.unwrap().increment(direction));
+                }
+            }
+
+        }
 
         return score;
     }

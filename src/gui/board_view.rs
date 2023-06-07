@@ -26,7 +26,7 @@ fn create_play_callback(c: char, coords: BoardCoordinates) -> Callback {
     Callback::from_fn(move |cursive: &mut Cursive| {
         let mut user_tiles: [Option<Tile>; 7] = [None;7];
         let mut board: Option<Board> = None;
-        let mut score: i32 = 0;
+        let mut score: u32 = 0;
         cursive.with_user_data(|game: &mut ScrabbleGame| {
             game.attempt_tile_play(c, coords.x, coords.y);
             user_tiles = game.user_tiles.clone();

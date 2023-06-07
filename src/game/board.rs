@@ -13,6 +13,16 @@ pub enum SpaceValue {
     TripleWord    
 }
 
+impl SpaceValue {
+    pub fn letter_multiplier(&self) -> u32 {
+        match self {
+            Self::DoubleLetter => 2,
+            Self::TripleLetter => 3,
+            _ => 1
+        }
+    }
+}
+
 #[derive(Copy, Clone)]
 pub struct Space {
     pub value: SpaceValue,
@@ -28,7 +38,7 @@ pub struct Board {
 }
 
 // are we allowed to put restrictions on this? i.e. less than 14
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct BoardCoordinates {
     pub x: usize,
     pub y: usize
