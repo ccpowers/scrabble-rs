@@ -15,8 +15,8 @@ There is no dictionary, or limit to where you can place your tiles. It's on the 
 ## Roadmap
 
 - Game:
--- Add word scores to scoring algorithm
--- Add dictionary of allowed words
--- Add wildcard tiles
--- Add restrictions to only place tiles on allowed spaces
--- Add game end conditions
+ - Add word scores to scoring algorithm
+ - Add dictionary of allowed words
+ - Add wildcard tiles
+ - Add restrictions to only place tiles on allowed spaces
+ - Add game end conditions
