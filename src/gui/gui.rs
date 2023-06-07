@@ -20,7 +20,7 @@ pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
     let rack_panel = Panel::new(generate_rack_views(&mut siv));
     
     // create the score view
-    let score_panel = Panel::new(TextView::new("Score goes here").center());
+    let score_panel = Panel::new(TextView::new("Score: 0").with_name("score"));
     
      // create the layout
      siv.add_layer(

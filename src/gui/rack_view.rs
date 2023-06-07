@@ -1,8 +1,8 @@
 use cursive::{Printer, CursiveRunnable, Cursive};
 use cursive::direction::Direction;
-use cursive::view::{View, CannotFocus, Nameable};
+use cursive::view::{View, CannotFocus, Nameable, Resizable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use cursive::views::{Button, LinearLayout, NamedView};
+use cursive::views::{Button, LinearLayout, NamedView, DummyView};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::{Tile, ExchangeTiles};
 use cursive::event::{EventResult};
@@ -84,7 +84,10 @@ pub fn generate_rack_views(siv: &mut CursiveRunnable) -> NamedView<LinearLayout>
     };
 
     rack_layout.get_mut().add_child(rack);
+    rack_layout.get_mut().add_child(DummyView.fixed_width(1));
     rack_layout.get_mut().add_child(Button::new("Exchange", exchange_tiles));
+    rack_layout.get_mut().add_child(DummyView.fixed_width(1));
     rack_layout.get_mut().add_child(Button::new("Draw", draw_tiles));
+
     return rack_layout;
 }

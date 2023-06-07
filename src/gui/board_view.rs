@@ -3,7 +3,7 @@ use cursive::event::{Key, Event, EventResult, Callback};
 use cursive::view::CannotFocus;
 use cursive::{Printer, Cursive};
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use cursive::views::{NamedView};
+use cursive::views::{NamedView, TextView};
 use log::info;
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
@@ -26,10 +26,12 @@ fn create_play_callback(c: char, coords: BoardCoordinates) -> Callback {
     Callback::from_fn(move |cursive: &mut Cursive| {
         let mut user_tiles: [Option<Tile>; 7] = [None;7];
         let mut board: Option<Board> = None;
+        let mut score: i32 = 0;
         cursive.with_user_data(|game: &mut ScrabbleGame| {
             game.attempt_tile_play(c, coords.x, coords.y);
             user_tiles = game.user_tiles.clone();
             board = Some(game.board.clone());
+            score = game.score();
         });
 
         // re-draw rack and board
@@ -45,6 +47,10 @@ fn create_play_callback(c: char, coords: BoardCoordinates) -> Callback {
             } else {
                 info!("No board to set");
             }
+        });
+
+        cursive.call_on_name("score", |view: &mut NamedView<TextView>| {
+            view.get_mut().set_content(format!("Score: {}", score));
         });
 
     })

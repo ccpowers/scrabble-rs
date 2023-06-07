@@ -15,6 +15,7 @@ pub struct ScrabbleGame {
 pub trait PlayableScrabbleGame {
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool;
     fn draw_tiles(&mut self) -> bool;
+    fn score(&self) -> i32;
 }
 
 impl PlayableScrabbleGame for ScrabbleGame {
@@ -71,7 +72,14 @@ impl PlayableScrabbleGame for ScrabbleGame {
 
         return played;
     }
+
+    fn score(&self) -> i32 {
+        let mut score = 0;
+
+        return score;
+    }
 }
+
 
 pub fn generate_scrabble_for_one() -> ScrabbleGame {
     //create and initilize the tile bag
