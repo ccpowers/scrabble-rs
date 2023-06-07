@@ -15,7 +15,6 @@ There is no dictionary, or limit to where you can place your tiles. It's on the 
 ## Roadmap
 
 - Game:
--- Finish annotating classic board
 -- Add word scores to scoring algorithm
 -- Add dictionary of allowed words
 -- Add wildcard tiles
