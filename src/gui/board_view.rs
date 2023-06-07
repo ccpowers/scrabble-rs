@@ -4,7 +4,7 @@ use cursive::view::CannotFocus;
 use cursive::{Printer, Cursive};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{NamedView, TextView};
-use log::info;
+use log::{info, trace, debug};
 use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
 use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
 use crate::game::tile_bag::Tile;
@@ -41,11 +41,11 @@ fn create_play_callback(c: char, coords: BoardCoordinates) -> Callback {
 
         cursive.call_on_name("board", |view: &mut BoardView| {
             if board.is_some() {
-                info!("Setting board");
+                trace!("Setting board");
                 view.set_board(board.unwrap());
                 //view.
             } else {
-                info!("No board to set");
+                debug!("No board to set");
             }
         });
 
@@ -78,8 +78,8 @@ impl cursive::view::View for BoardView {
                     SpaceValue::SingleLetter => Color::RgbLowRes(3,3,3),
                     SpaceValue::TripleWord => Color::RgbLowRes(5,3,3),
                     SpaceValue::DoubleLetter => Color::RgbLowRes(3, 3, 4),
-                    SpaceValue::TripleLetter => Color::RgbLowRes(4, 3, 3),
-                    SpaceValue::DoubleWord => Color::RgbLowRes(3, 3, 5)
+                    SpaceValue::TripleLetter => Color::RgbLowRes(3, 3, 5),
+                    SpaceValue::DoubleWord => Color::RgbLowRes(4, 3, 3)
                 };
 
                 if self.selected.x == r && self.selected.y == c {

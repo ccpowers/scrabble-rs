@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::iter::Map;
 
 use rand::rngs::ThreadRng;
-use log::info;
+use log::{info, debug, trace};
 use crate::game::board::print_board;
 
 use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
@@ -36,7 +36,7 @@ impl PlayableScrabbleGame for ScrabbleGame {
     }
 
     fn attempt_tile_play(&mut self, c: char, row: usize, col: usize) -> bool {
-        info!("Attempting to play tile {} at {} {}", c, row, col);
+        debug!("Attempting to play tile {} at {} {}", c, row, col);
         let mut played = false;
 
         // check if character exists on bag
@@ -48,7 +48,7 @@ impl PlayableScrabbleGame for ScrabbleGame {
                 tile_ind = ind;
             }
         }
-        info!("Tile index: {}", tile_ind);
+        debug!("Tile index: {}", tile_ind);
 
         // check if space is available
         // TODO make this a static const
@@ -57,12 +57,12 @@ impl PlayableScrabbleGame for ScrabbleGame {
 
             if space.current_tile.is_none() {
                 let tile = self.user_tiles[tile_ind];
-                if tile.is_some() { info!("Tile is {:?}", tile)};
+                if tile.is_some() { trace!("Tile is {:?}", tile)};
                 self.user_tiles[tile_ind] = None;
                 print_user_tiles(self.user_tiles);
                 space.current_tile = tile;
                 played = true;
-                info!("Space has tile {}", space.current_tile.unwrap().character);
+                trace!("Space has tile {}", space.current_tile.unwrap().character);
                 print_board(&self.board);
                 self.board.spaces[row][col] = space;
                 print_board(&self.board);

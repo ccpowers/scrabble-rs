@@ -1,6 +1,6 @@
 use std::cmp::{max, min};
 
-use log::info;
+use log::{info, trace, debug};
 
 use crate::game::tile_bag::Tile;
 
@@ -74,7 +74,7 @@ impl Increment for BoardCoordinates {
         let board_max: i32 = TryInto::<i32>::try_into(BOARD_SIZE).unwrap() - 1;
         x = min(max(x, 0), board_max);
         y = min(max(y, 0), board_max);
-        info!("Board coordinates are {} {}", x, y);
+        trace!("Board coordinates are {} {}", x, y);
         return BoardCoordinates {x: x.try_into().unwrap(), y: y.try_into().unwrap()};
     }
 }
@@ -134,6 +134,80 @@ pub fn create_classic_board() -> Board {
     for coordinate in triple_word_coordinates {
         board.spaces[coordinate.x][coordinate.y].value = SpaceValue::TripleWord;
     }
+
+    let double_word_coordinates: [BoardCoordinates; 17] = [
+        BoardCoordinates {x:1, y:1}, 
+        BoardCoordinates {x:2, y:2},
+        BoardCoordinates {x:3, y:3},
+        BoardCoordinates {x:4, y:4},
+        BoardCoordinates {x:7, y:7},
+        BoardCoordinates {x:13, y:1},
+        BoardCoordinates {x:12, y:2},
+        BoardCoordinates {x:11, y:3},
+        BoardCoordinates {x:10, y:4}, 
+        BoardCoordinates {x:1, y:13},
+        BoardCoordinates {x:2, y:12},
+        BoardCoordinates {x:3, y:11},
+        BoardCoordinates {x:4, y:10},
+        BoardCoordinates {x:11, y:11},
+        BoardCoordinates {x:13, y:13},
+        BoardCoordinates {x:12, y:12},
+        BoardCoordinates {x: 10, y: 10}
+    ];
+
+    for coordinate in double_word_coordinates {
+        board.spaces[coordinate.x][coordinate.y].value = SpaceValue::DoubleWord;
+    }
+
+    let double_letter_coordinates = [
+        BoardCoordinates {x:0, y:3},
+        BoardCoordinates {x:0, y:11},
+        BoardCoordinates {x:2, y:6},
+        BoardCoordinates {x:2, y:8},
+        BoardCoordinates {x:3, y:0},
+        BoardCoordinates {x:3,y:7},
+        BoardCoordinates {x:3, y:14},
+        BoardCoordinates {x:6, y:2},
+        BoardCoordinates {x:6, y:6},
+        BoardCoordinates {x:6,y:8},
+        BoardCoordinates {x:6, y:12},
+        BoardCoordinates {x:7, y:3},
+        BoardCoordinates {x:7, y:11},
+        BoardCoordinates {x:8, y:2},
+        BoardCoordinates {x:8, y:6},
+        BoardCoordinates {x:8,y:8},
+        BoardCoordinates {x:8, y:12},
+        BoardCoordinates {x:11, y:0},
+        BoardCoordinates {x:11, y:7},
+        BoardCoordinates {x:11, y:14},
+        BoardCoordinates {x:12, y:6},
+        BoardCoordinates {x:12, y:8},
+        BoardCoordinates {x:14, y:3},
+        BoardCoordinates {x:14, y:11},
+    ];
+
+    for coordinate in double_letter_coordinates {
+        board.spaces[coordinate.x][coordinate.y].value = SpaceValue::DoubleLetter;
+    }
+
+    let triple_letter_coordinates = [
+        BoardCoordinates {x:1, y:5},
+        BoardCoordinates {x:1, y:9},
+        BoardCoordinates {x:5, y:1},
+        BoardCoordinates {x:5, y:5},
+        BoardCoordinates {x:5, y:9},
+        BoardCoordinates {x:5, y:13}, 
+        BoardCoordinates {x:13, y:5},
+        BoardCoordinates {x:13, y:9},
+        BoardCoordinates {x:9, y:1},
+        BoardCoordinates {x:9, y:5},
+        BoardCoordinates {x:9, y:9},
+        BoardCoordinates {x:9, y:13},
+    ];
+
+    for coordinate in triple_letter_coordinates {
+        board.spaces[coordinate.x][coordinate.y].value = SpaceValue::TripleLetter;
+    }
     
     return board;
 }
@@ -152,5 +226,5 @@ pub fn print_board(board: &Board) -> () {
         board_string.push('\n');
     }
 
-    info!("{}", board_string);
+    debug!("{}", board_string);
 }
