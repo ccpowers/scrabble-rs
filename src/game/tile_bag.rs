@@ -1,8 +1,9 @@
-use core::num;
+use std::fmt::{self, Display};
 
+use log::info;
 use rand::rngs::ThreadRng;
 use rand::Rng;
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Tile {
     pub character: char,
     pub value: u32
@@ -35,8 +36,14 @@ pub trait ExchangeTiles {
     fn exchange_tiles(&mut self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7];
 }
 
+impl Display for Tile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "({}, {})", self.character, self.value)
+    }
+}
 impl AddTile for TileBag {
     fn add_tile(&mut self, tile: Tile) -> () {
+        info!("Added tile {} to bag", tile.character);
         self.tiles.push(tile);
     }
 }
@@ -53,13 +60,14 @@ impl DrawTile for TileBag {
 
         // remove them from the bag
         let tile = self.tiles.remove(ind);
-        println!("Drew tile {}", tile.character);
+        info!("Drew tile {}", tile.character);
         return Some(tile);
     }
 }
 
 impl ExchangeTiles for TileBag {
     fn exchange_tiles(&mut self, tiles: [Option<Tile>; 7]) -> [Option<Tile>; 7] {
+        info!("Exchanging tiles");
         // add all tiles to bag
         let mut num_tiles = 0;
         for tile_option in tiles {
@@ -87,7 +95,7 @@ impl PrintTiles for TileBag {
         for tile in &self.tiles {
             str.push_str(&format!("({} {})", tile.character, tile.value));
         }
-        println!("{}", str);
+        info!("{}", str);
     }
 }
 
@@ -133,4 +141,16 @@ pub fn classic_tile_bag() -> TileBag {
     }
 
     return tile_bag;  
+}
+
+pub fn print_user_tiles(tiles: [Option<Tile>; 7]) {
+    let mut tile_str = "Tiles: ".to_string();
+    for tile in tiles {
+        let t = match tile {
+            None => "[ ]".to_string(),
+            Some(t) => format!("[{}]", t.character)
+        };
+        tile_str = tile_str + &t;
+    }
+    info!("{}", tile_str);
 }

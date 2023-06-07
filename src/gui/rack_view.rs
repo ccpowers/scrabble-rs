@@ -1,63 +1,49 @@
-use cursive::{Printer, CursiveRunnable, With, Cursive};
+use cursive::{Printer, CursiveRunnable, Cursive};
 use cursive::direction::Direction;
-use cursive::view::{View, CannotFocus, Nameable};
+use cursive::view::{View, CannotFocus, Nameable, Resizable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
-use cursive::views::{Button, LinearLayout, NamedView};
-use crate::game::game::ScrabbleGame;
-use crate::game::tile_bag::{Tile, TileBag, ExchangeTiles};
-use cursive::event::{Event, EventResult, MouseButton, MouseEvent};
-use super::selectable::{Selectable, SetSelected};
+use cursive::views::{Button, LinearLayout, NamedView, DummyView};
+use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
+use crate::game::tile_bag::{Tile, ExchangeTiles};
+use cursive::event::{EventResult};
 
-pub struct TileView {
+
+pub struct RackView {
     pub tiles: [Option<Tile>; 7],
-    pub tile_index: usize,
-    pub selected: Selectable
 }
 
-impl View for TileView {
+impl RackView {
+    pub fn new(tiles: [Option<Tile>; 7]) -> Self {
+        return RackView {tiles: tiles};
+    }
+
+    pub fn set_tiles(&mut self, tiles: [Option<Tile>; 7]) {
+        self.tiles = tiles;
+    }
+}
+
+impl View for RackView {
     fn draw(&self, printer: &Printer) -> () {
-        // how to ensure index is in range?
-        let text = match self.tiles[self.tile_index] {
-            Some(c) => format!("[{}]", c.character),
-            None => "[ ]".to_string()
-        };
+        for (ind, tile) in self.tiles.iter().enumerate() {
+            let text = match tile {
+                Some(c) => format!("[{}]", c.character),
+                None => "[ ]".to_string()
+            };
 
-        let selected_color: Color = match (self.selected.selected, printer.focused) {
-            (false, false) => Color::RgbLowRes(3, 3, 3),
-            (true, false) => Color::RgbLowRes(5, 3, 3),
-            (false, true) => Color::RgbLowRes(3, 5, 3),
-            (true, true) => Color::RgbLowRes(5, 5, 3)
-        };
-
-        printer.with_color(
-            ColorStyle::new(Color::Dark(BaseColor::Black), selected_color),
-            |printer| printer.print((0, 0), &text),
-        );
+            printer.with_color(
+                ColorStyle::new(Color::Dark(BaseColor::Black), Color::RgbLowRes(3, 3, 3)),
+                |printer| printer.print((ind * 3, 0), &text),
+            );
+        }
     } 
 
     fn required_size(&mut self, _constraint: cursive::Vec2) -> cursive::Vec2 {
-        return cursive::Vec2::new(3, 1);
+        return cursive::Vec2::new(3 * self.tiles.len(), 1);
     }
 
     fn take_focus(&mut self, _: Direction) -> Result<EventResult, CannotFocus> {
         return Ok(EventResult::Consumed(None));
     }
-
-    fn on_event(&mut self, event: Event) -> EventResult {
-        let mut consumed: bool = false;
-
-        match event {
-            Event::Mouse {offset: _, position: _, event: MouseEvent::Press(MouseButton::Left)} => { self.selected.set_selected(true); consumed =true},
-            _ => ()
-        };
-
-        if consumed {
-            return EventResult::Consumed(None);
-        } else {
-            return EventResult::Ignored;
-        }
-    }
-
 }
 
 pub fn exchange_tiles(s: &mut Cursive) {
@@ -69,30 +55,39 @@ pub fn exchange_tiles(s: &mut Cursive) {
     });
     
     // get list of selected tiles from rack view
-    s.call_on_name("rack", |view: &mut NamedView<LinearLayout>| {
-        for tile_index in 0..5 {
-            view.get_mut().remove_child(tile_index);
-            view.get_mut().add_child(TileView {tiles: user_tiles, tile_index, selected: Selectable {selected: false}});
-        }
+    s.call_on_name("rack", |view: &mut NamedView<RackView>| {
+        view.get_mut().set_tiles(user_tiles);
     });
-    
-    // put new tiles at back of rack view
+}
 
+pub fn draw_tiles(s: &mut Cursive) {
+      // exchange tiles
+      let mut user_tiles: [Option<Tile>; 7] = [None; 7];
+      s.with_user_data(|scrabble_game: &mut ScrabbleGame| {
+          scrabble_game.draw_tiles();
+          user_tiles = scrabble_game.user_tiles.clone();
+      });
+      
+      // get list of selected tiles from rack view
+      s.call_on_name("rack", |view: &mut NamedView<RackView>| {
+          view.get_mut().set_tiles(user_tiles);
+      });  
 }
 
 pub fn generate_rack_views(siv: &mut CursiveRunnable) -> NamedView<LinearLayout> {
     let mut rack_layout: NamedView<LinearLayout> = LinearLayout::horizontal().with_name("rack_wrapper");
-    let mut rack: NamedView<LinearLayout> = LinearLayout::horizontal().with_name("rack");
+    let mut rack: NamedView<RackView> = RackView::new([None;7]).with_name("rack");
 
-    let mut user_data = siv.user_data::<ScrabbleGame>();
+    let user_data = siv.user_data::<ScrabbleGame>();
     if user_data.is_some() {
-        for tile_index in 0..6 {
-            rack.get_mut().add_child(TileView {tiles: user_data.as_mut().unwrap().user_tiles, tile_index, selected: Selectable {selected: false}});
-        }
+        rack.get_mut().set_tiles(user_data.unwrap().user_tiles.clone());
     };
 
     rack_layout.get_mut().add_child(rack);
+    rack_layout.get_mut().add_child(DummyView.fixed_width(1));
     rack_layout.get_mut().add_child(Button::new("Exchange", exchange_tiles));
+    rack_layout.get_mut().add_child(DummyView.fixed_width(1));
+    rack_layout.get_mut().add_child(Button::new("Draw", draw_tiles));
 
     return rack_layout;
 }
