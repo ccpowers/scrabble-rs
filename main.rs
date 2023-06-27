@@ -1,11 +1,16 @@
-use game::{game::{ScrabbleGame, generate_scrabble_for_one}};
-use crate::gui::gui::{generate_scrabble_gui};
+use crate::game::{ScrabbleGame, generate_scrabble_for_one};
+use crate::gui::generate_scrabble_gui;
+extern crate log;
 use log::{info};
-use log4rs;
+extern crate log4rs;
+//use log4rs;
 
 pub mod game;
 pub mod gui;
-
+pub mod board;
+pub mod board_view;
+pub mod rack_view;
+pub mod tile_bag;
 fn main() {
     // initialize logs
     log4rs::init_file("logging.yaml", Default::default()).unwrap();

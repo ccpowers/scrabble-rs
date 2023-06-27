@@ -3,10 +3,23 @@ name = "scrabble-rs"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 cursive = "0.20.0"
 log = "0.4.18"
 log4rs = "1.2.0"
 rand = "0.8.5"
+
+[[bin]]
+name = "scrabble-rs"           # The name of the target.
+path = "main.rs"    # The source file of the target.
+test = false            # Is tested by default.
+doctest = false        # Documentation examples are tested by default.
+bench = false           # Is benchmarked by default.
+doc = false            # Is documented by default.
+plugin = false         # Used as a compiler plugin (deprecated).
+proc-macro = false     # Set to `true` for a proc-macro library.
+harness = false         # Use libtest harness.
+required-features = [] # Features required to build this target (N/A for lib).
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+

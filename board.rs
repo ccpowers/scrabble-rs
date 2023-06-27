@@ -2,7 +2,7 @@ use std::cmp::{max, min};
 
 use log::{info, trace, debug};
 
-use crate::game::tile_bag::Tile;
+use crate::tile_bag::Tile;
 
 #[derive(Copy, Clone)]
 pub enum SpaceValue {

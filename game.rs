@@ -1,12 +1,13 @@
 use std::collections::HashMap;
-use std::iter::Map;
 
+extern crate rand;
+extern crate log;
 use rand::rngs::ThreadRng;
 use log::{info, debug, trace};
-use crate::game::board::print_board;
+use crate::board::print_board;
 
-use super::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
-use super::board::{Board, create_classic_board, BoardCoordinates, BoardDirection, Increment};
+use crate::tile_bag::{Tile, TileBag, classic_tile_bag, DrawTile, print_user_tiles};
+use crate::board::{Board, create_classic_board, BoardCoordinates, BoardDirection, Increment};
 
 
 pub struct ScrabbleGame {

@@ -1,8 +1,11 @@
 use std::fmt::{self, Display};
 
 use log::info;
+
+extern crate rand;
 use rand::rngs::ThreadRng;
 use rand::Rng;
+
 #[derive(Copy, Clone, Debug)]
 pub struct Tile {
     pub character: char,

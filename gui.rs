@@ -1,10 +1,11 @@
+
 use cursive::views::{TextView, Dialog, LinearLayout, DummyView, Panel};
 use cursive::{CursiveRunnable};
 use cursive::align::HAlign;
 use cursive::view::{Resizable, Nameable};
-use crate::game::game::{ScrabbleGame};
-use crate::gui::rack_view::{generate_rack_views};
-use crate::gui::board_view::generate_board_view;
+use crate::game::{ScrabbleGame};
+use crate::rack_view::{generate_rack_views};
+use crate::board_view::generate_board_view;
 
 pub fn generate_scrabble_gui(game: ScrabbleGame) -> CursiveRunnable {
     // show some stuff with cursive

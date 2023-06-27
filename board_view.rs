@@ -5,10 +5,10 @@ use cursive::{Printer, Cursive};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{NamedView, TextView};
 use log::{info, trace, debug};
-use crate::game::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
-use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
-use crate::game::tile_bag::Tile;
-use super::rack_view::RackView;
+use crate::board::{Board, SpaceValue, BOARD_SIZE, BoardCoordinates, Increment, BoardDirection, print_board};
+use crate::game::{ScrabbleGame, PlayableScrabbleGame};
+use crate::tile_bag::Tile;
+use crate::rack_view::RackView;
 
 
 pub struct BoardView {

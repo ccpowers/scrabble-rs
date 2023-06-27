@@ -3,8 +3,8 @@ use cursive::direction::Direction;
 use cursive::view::{View, CannotFocus, Nameable, Resizable};
 use cursive::theme::{Color, ColorStyle, BaseColor};
 use cursive::views::{Button, LinearLayout, NamedView, DummyView};
-use crate::game::game::{ScrabbleGame, PlayableScrabbleGame};
-use crate::game::tile_bag::{Tile, ExchangeTiles};
+use crate::game::{ScrabbleGame, PlayableScrabbleGame};
+use crate::tile_bag::{Tile, ExchangeTiles};
 use cursive::event::{EventResult};
 
 
